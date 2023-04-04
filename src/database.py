@@ -103,3 +103,7 @@ class LiteConnector:
     def __exit__(self):
         """ Determines what happens when closing a database connection using the content manager. """
         self.disconnect()
+
+
+if __name__ == '__main__':
+    print_table_contents(db_connect())
