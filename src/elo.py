@@ -1,5 +1,3 @@
-
-
 def starting_elo():
     return 1200
 

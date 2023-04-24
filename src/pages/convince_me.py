@@ -11,7 +11,7 @@ from src.ask_ai import ask_ai, get_api_key
 from src.pages.styles import hide_default_style
 
 
-def convince_me_page(session_state, monster, db):
+def convince_me_page(monster, db):
     hide_default_style()
     
     left_container, right_container = st.columns([1,2])
@@ -19,26 +19,26 @@ def convince_me_page(session_state, monster, db):
         display_moster(monster)
     with right_container.container():
         st.title("convince.me")
-        user_interaction(db, session_state)
+        user_interaction(db)
 
 
 def display_moster(monster_code):
     st_lottie(monster_code, speed=1, key="monster")
 
 
-def user_interaction(db, session_state):
-    session_state.user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me here...', height=200)
+def user_interaction(db):
+    st.session_state.user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me here...', height=200)
     
     # Add a button to send user input to a variable
     if st.button('Send'):
         with st.spinner('Hmm...'):
-            session_state.response, should_save = handle_response(session_state.user_input, db)
+            st.session_state.response, should_save = handle_response(db)
 
         if should_save:
             # Save user input and AI response in database
-            save_entry(db, session_state.user_input, session_state.response, starting_elo())
+            save_entry(db, st.session_state.user_input, st.session_state.response, starting_elo())
         
-        session_state.page = "results_page"
+        st.session_state.page = "results_page"
         st.experimental_rerun()
 
 

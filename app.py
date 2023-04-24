@@ -30,29 +30,28 @@ def load_lottieurl(url):
 
 
 def main_app(monster, db):
-    st.set_page_config(page_title = "convince.me", page_icon = ":smiley:", layout = "wide", initial_sidebar_state = 'collapsed')
-    global session_state
-    session_state = st.session_state
-    if not hasattr(session_state, "page"):
-        session_state.initialized = True
-        session_state.page = "convince_me_page"
+    st.set_page_config(page_title = "convince.me", page_icon = ":smiley:", layout = "wide", initial_sidebar_state = st.session_state.get('sidebar_state', 'collapsed'))
+    if not hasattr(st.session_state, "page"):
+        st.session_state.initialized = True
+        st.session_state.page = "convince_me_page"
         
     with st.sidebar:
         st.header("Navigation")
         if st.button("Home"):
-            session_state.page = "convince_me_page"
+            st.session_state.page = "convince_me_page"
+            
         if st.button("Review"):
-            session_state.page = "review_page"
+            st.session_state.page = "review_page"
 
     # Display the appropriate page
-    if session_state.page == "convince_me_page":
-        convince_me_page(session_state, monster, db)
-    elif session_state.page == "results_page":
-        results_page(session_state)
-    elif session_state.page == "review_page":
-        review_page(session_state, db)
-    elif session_state.page == "reviewed_page":
-        reviewed_page(session_state)
+    if st.session_state.page == "convince_me_page":
+        convince_me_page(monster, db)
+    elif st.session_state.page == "results_page":
+        results_page()
+    elif st.session_state.page == "review_page":
+        review_page(db)
+    elif st.session_state.page == "reviewed_page":
+        reviewed_page()
 
 if __name__ == "__main__":
     monster = make_monster_choice()
