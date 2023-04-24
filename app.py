@@ -1,3 +1,4 @@
+# streamlit run app.py
 import random
 import requests
 import openai
@@ -8,6 +9,10 @@ from src.database import db_connect
 from src.ask_ai import get_api_key
 from src.pages.convince_me import convince_me_page
 from src.pages.review import review_page
+from src.pages.results import results_page
+from src.pages.reviewed import reviewed_page
+
+
 
 # https://www.youtube.com/watch?v=Yd_W0sU1Fx4 -- you can have multiple pages in streamlit
 
@@ -23,9 +28,9 @@ def load_lottieurl(url):
         return None
     return response.json()
 
-# Define the app
+
 def main_app(monster, db):
-    st.set_page_config(page_title = "convince.me", page_icon = ":smiley:", layout = "centered")
+    st.set_page_config(page_title = "convince.me", page_icon = ":smiley:", layout = "wide", initial_sidebar_state = 'collapsed')
     global session_state
     session_state = st.session_state
     if not hasattr(session_state, "page"):
@@ -42,12 +47,14 @@ def main_app(monster, db):
     # Display the appropriate page
     if session_state.page == "convince_me_page":
         convince_me_page(session_state, monster, db)
+    elif session_state.page == "results_page":
+        results_page(session_state)
     elif session_state.page == "review_page":
-        review_page(session_state)
-
+        review_page(session_state, db)
+    elif session_state.page == "reviewed_page":
+        reviewed_page(session_state)
 
 if __name__ == "__main__":
-
     monster = make_monster_choice()
     db = db_connect()
     openai.api_key = get_api_key("api_key")

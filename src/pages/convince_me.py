@@ -13,32 +13,32 @@ from src.pages.styles import hide_default_style
 
 def convince_me_page(session_state, monster, db):
     hide_default_style()
-    st.title("convince.me")
-    st.write("write")
-    user_interaction(db, session_state)
-    display_moster(monster)
     
+    left_container, right_container = st.columns([1,2])
+    with left_container.container():
+        display_moster(monster)
+    with right_container.container():
+        st.title("convince.me")
+        user_interaction(db, session_state)
+
 
 def display_moster(monster_code):
     st_lottie(monster_code, speed=1, key="monster")
 
 
 def user_interaction(db, session_state):
-    user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me here...', height=200)
+    session_state.user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me here...', height=200)
     
     # Add a button to send user input to a variable
     if st.button('Send'):
         with st.spinner('Hmm...'):
-            response, should_save = handle_response(user_input, db)
-        
-        st.write(f"<div style='text-align: center;'>{response}</div>", unsafe_allow_html=True)
-    
+            session_state.response, should_save = handle_response(session_state.user_input, db)
+
         if should_save:
             # Save user input and AI response in database
-            save_entry(db, user_input, response, starting_elo())
+            save_entry(db, session_state.user_input, session_state.response, starting_elo())
         
-        # TODO: add 'results page' as in between page to show user their response and AI response
-        session_state.page = "review_page"
+        session_state.page = "results_page"
         st.experimental_rerun()
 
 
