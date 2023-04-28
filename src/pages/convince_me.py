@@ -19,6 +19,7 @@ def convince_me_page(monster, db):
         display_moster(monster)
     with right_container.container():
         st.title("convince.me")
+        st.text("You've approached me at my bridge! But nothing I've seen has made me want to let you past.\nWrite a short message that would convince me to let you through...")
         user_interaction(db)
 
 
@@ -27,7 +28,7 @@ def display_moster(monster_code):
 
 
 def user_interaction(db):
-    st.session_state.user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me here...', height=200)
+    st.session_state.user_input = st.text_area(label = 'Write your response here and hit enter', label_visibility = 'collapsed', placeholder='convince me...', height=200)
     
     # Add a button to send user input to a variable
     if st.button('Send'):
@@ -51,18 +52,18 @@ def too_long_validation(user_input) -> bool:
     return word_count > 200
 
 
-def handle_response(user_input, db):
-    if too_short_validation(user_input):
+def handle_response(db):
+    if too_short_validation(st.session_state.user_input):
         return f"Your answer is too short. Please write at least 10 words and no more than 200 words.", False
     
-    if too_long_validation(user_input):
+    if too_long_validation(st.session_state.user_input):
         return f"Your answer is too long. Please write at least 10 words and no more than 200 words.", False
 
-    existing_response = check_entry_against_db(db, user_input)
+    existing_response = check_entry_against_db(db, st.session_state.user_input)
     if existing_response:
         return f"I've heard that before... I'll tell you again:\n{existing_response}", False
     
     # if all checks pass, ask AI for a response
-    response = ask_ai(user_input)
+    response = ask_ai(st.session_state.user_input)
     
     return response, True

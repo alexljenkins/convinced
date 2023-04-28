@@ -16,7 +16,7 @@ def results_page():
     
     display_results()
     
-    if st.button("Review other responses"):
+    if st.button("See what others have tried"):
         st.session_state.page = "review_page"
         st.experimental_rerun()
 

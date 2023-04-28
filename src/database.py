@@ -69,7 +69,7 @@ def add_to_db_log(db, winning_response, losing_response, rating_change):
         (winning_response_id, winner_new_elo, losing_response_id, loser_new_elo, change_in_elo)
         VALUES (?, ?, ?, ?, ?)""", [winning_response[0], winning_response[4], losing_response[0], losing_response[4], rating_change])
 
-    
+
 class LiteConnector:
     database: str
     connection: ...
