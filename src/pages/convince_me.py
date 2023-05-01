@@ -33,11 +33,11 @@ def user_interaction(db):
     # Add a button to send user input to a variable
     if st.button('Send'):
         with st.spinner('Hmm...'):
-            st.session_state.response, should_save = handle_response(db)
+            st.session_state.teacher_response, st.session_state.monster_response, should_save = handle_response(db)
 
         if should_save:
-            # Save user input and AI response in database
-            save_entry(db, st.session_state.user_input, st.session_state.response, starting_elo())
+            # Save user input and AI responses in database
+            save_entry(db, st.session_state.user_input, st.session_state.teacher_response, st.session_state.monster_response, starting_elo())
         
         st.session_state.page = "results_page"
         st.experimental_rerun()
@@ -54,16 +54,22 @@ def too_long_validation(user_input) -> bool:
 
 def handle_response(db):
     if too_short_validation(st.session_state.user_input):
-        return f"Your answer is too short. Please write at least 10 words and no more than 200 words.", False
+        return ("Your answer is too short. Please write at least 10 words and no more than 200 words.",
+                "Your answer is too short. Please write at least 10 words and no more than 200 words.",
+                False)
     
     if too_long_validation(st.session_state.user_input):
-        return f"Your answer is too long. Please write at least 10 words and no more than 200 words.", False
+        return ("Your answer is too long. Please write at least 10 words and no more than 200 words.",
+                "Your answer is too long. Please write at least 10 words and no more than 200 words.",
+                False)
 
     existing_response = check_entry_against_db(db, st.session_state.user_input)
     if existing_response:
-        return f"I've heard that before... I'll tell you again:\n{existing_response}", False
+        return (f"I've heard that before... I'll tell you again:\n{existing_response}",
+                f"I've heard that before... I'll tell you again:\n{existing_response}",
+                False)
     
     # if all checks pass, ask AI for a response
-    response = ask_ai(st.session_state.user_input)
+    teacher_response, monster_response = ask_ai(st.session_state.user_input)
     
-    return response, True
+    return teacher_response, monster_response, True
