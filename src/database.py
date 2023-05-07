@@ -11,7 +11,7 @@ def db_connect():
                 id INTEGER PRIMARY KEY,
                 user_input TEXT,
                 teacher_response TEXT,
-                monster_response TEXT,
+                character_response TEXT,
                 vote_count INTEGER,
                 elo INTEGER
             )
@@ -62,11 +62,19 @@ def get_entries_for_voting(db, top_group:float = 2/3, bottom_group:float = 1/3) 
     return list(entries[0]), list(entries[1])
 
 
-def save_entry(db, user_input:str, teacher_response:str, monster_response:str, elo:int) -> None:
+def save_entry(db, user_input:str, teacher_response:Union[str, None], monster_response:Union[str, None], elo:int) -> None:
     db.run_query("INSERT INTO convinceme_001 (user_input, teacher_response, monster_response, vote_count, elo) VALUES (?, ?, ?, 0, ?)", [user_input, teacher_response, monster_response, elo])
 
-def update_entry(db, id:int, elo:int, vote_count:int) -> None:
+def update_entry_with_teacher(db, user_input:str, teacher_response:str) -> None:
+    db.run_query(f"UPDATE convinceme_001 SET teacher_response = {teacher_response} WHERE id = {id} AND user_input = {user_input}")
+
+def update_entry_with_character(db, user_input:str, character_response:str) -> None:
+    db.run_query(f"UPDATE convinceme_001 SET character_response = {character_response} WHERE id = {id} AND user_input = {user_input}")
+
+
+def update_entry_from_vote(db, id:int, elo:int, vote_count:int) -> None:
     db.run_query(f"UPDATE convinceme_001 SET vote_count = {vote_count}, elo = {elo} WHERE id = {id}")
+
 
 def add_to_db_log(db, winning_response:list, losing_response:list, rating_change:int) -> None:
     db.run_query(f"""

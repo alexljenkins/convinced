@@ -49,7 +49,7 @@ def ask_teacher_ai(user_input:str, key:str) -> Tuple[str, MessageLog]:
     return response, teacher_log
 
 
-def ask_monster_ai(user_input:str, parsed_teacher_response:TeacherResponse, key:str) -> Tuple[str, MessageLog]:
+def ask_character_ai(user_input:str, parsed_teacher_response:TeacherResponse, key:str) -> Tuple[str, MessageLog]:
     monster_log = MessageLog()
     if parsed_teacher_response.OVERALL.SCORE >= PASSING_SCORE:
         monster_log.add_response("system", message_monster_ai_passing())

@@ -2,7 +2,7 @@ import logging
 
 import streamlit as st
 
-from src.database import update_entry, get_entries_for_voting, add_to_db_log
+from src.database import update_entry_from_vote, get_entries_for_voting, add_to_db_log
 from src.elo import calculate_rating_change
 from src.pages.styles import hide_default_style
 
@@ -13,11 +13,11 @@ def vote(db, winning_response, losing_response):
     
     # winner
     winning_response[5] += rating_change
-    update_entry(db = db, id = winning_response[0], elo = winning_response[5], vote_count = winning_response[4] + 1)
+    update_entry_from_vote(db = db, id = winning_response[0], elo = winning_response[5], vote_count = winning_response[4] + 1)
     
     # loser
     losing_response[5] -= rating_change
-    update_entry(db = db, id = losing_response[0], elo = losing_response[5], vote_count = losing_response[4] + 1)
+    update_entry_from_vote(db = db, id = losing_response[0], elo = losing_response[5], vote_count = losing_response[4] + 1)
 
     add_to_db_log(db, winning_response, losing_response, rating_change)
     logger.info(f"\nWinner: {[winning_response[index] for index in [0,4,5]]}\nLoser: {[losing_response[index] for index in [0,4,5]]}\nRating Change: {rating_change}")
