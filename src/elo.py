@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 def starting_elo():
     return 1200
 
@@ -15,5 +19,6 @@ def calculate_rating_change(current_rating, opponant_rating, outcome=1):
     """
     expected_score = 1 / (1 + 10**((opponant_rating - current_rating)/400))
     K = 32
-    rating_change = abs(K * (outcome - expected_score))
-    return int(rating_change)
+    rating_change = int(abs(K * (outcome - expected_score)))
+    # logger.info(f"Results: {current_rating} beat {opponant_rating}, Rating change: {rating_change}")
+    return rating_change

@@ -1,15 +1,12 @@
-import random
-import requests
-import openai
-import time
+import json
 import streamlit as st
 from streamlit_lottie import st_lottie
 
-from src.database import save_entry, db_connect, check_entry_against_db
-from src.elo import starting_elo, calculate_rating_change
-from src.ask_ai import ask_ai, get_api_key
+from src.database import save_entry, check_entry_against_db
+from src.elo import starting_elo
+from src.ask_ai import ask_ai
 from src.pages.styles import hide_default_style
-
+from src.message_log import parse_teacher_reponse
 
 def convince_me_page(monster, db):
     hide_default_style()
@@ -19,7 +16,7 @@ def convince_me_page(monster, db):
         display_moster(monster)
     with right_container.container():
         st.title("convince.me")
-        st.text("You've approached me at my bridge! But nothing I've seen has made me want to let you past.\nWrite a short message that would convince me to let you through...")
+        st.markdown("You've approached me at my bridge! But nothing I've seen has made me want to let you past.\nWrite a short message that would convince me to let you through...")
         user_interaction(db)
 
 
@@ -37,7 +34,7 @@ def user_interaction(db):
 
         if should_save:
             # Save user input and AI responses in database
-            save_entry(db, st.session_state.user_input, st.session_state.teacher_response, st.session_state.monster_response, starting_elo())
+            save_entry(db, st.session_state.user_input, st.session_state.teacher_response.__str__(), st.session_state.monster_response, starting_elo())
         
         st.session_state.page = "results_page"
         st.experimental_rerun()
@@ -63,10 +60,11 @@ def handle_response(db):
                 "Your answer is too long. Please write at least 10 words and no more than 200 words.",
                 False)
 
-    existing_response = check_entry_against_db(db, st.session_state.user_input)
-    if existing_response:
-        return (f"I've heard that before... I'll tell you again:\n{existing_response}",
-                f"I've heard that before... I'll tell you again:\n{existing_response}",
+    existing_teacher_response, existing_monster_response = check_entry_against_db(db, st.session_state.user_input)
+    if isinstance(existing_teacher_response, str) and isinstance(existing_monster_response, str):
+        existing_teacher_response_parsed = parse_teacher_reponse(existing_teacher_response)
+        return (existing_teacher_response_parsed,
+                f"I've heard that before... Let me tell you again:  \n{existing_monster_response}",
                 False)
     
     # if all checks pass, ask AI for a response

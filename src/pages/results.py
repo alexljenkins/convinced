@@ -1,14 +1,9 @@
-import random
-import requests
-import openai
-
 import streamlit as st
-from streamlit_lottie import st_lottie
+import json
 
-from src.database import save_entry, check_entry_against_db, get_entries_for_voting
-from src.elo import starting_elo, calculate_rating_change
-from src.ask_ai import ask_ai, get_api_key
 from src.pages.styles import hide_default_style
+from src.message_log import parse_teacher_reponse
+
 
 def results_page():
     hide_default_style()
@@ -20,5 +15,8 @@ def results_page():
         st.session_state.page = "review_page"
         st.experimental_rerun()
 
+
 def display_results():
-    st.write(f"<div style='text-align: center;'>{st.session_state.response}</div><br><br><br><br>", unsafe_allow_html=True)
+    st.markdown(f"{st.session_state.monster_response}", unsafe_allow_html=True)
+    st.table(data=st.session_state.teacher_response.df_format())
+    # st.write(f"{st.session_state.teacher_response}")

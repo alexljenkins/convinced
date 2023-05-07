@@ -43,12 +43,13 @@ def maybe_play_balloons():
         st.balloons()
 
 def display_next_review():
-        st.session_state.page = "review_page"
-        
-        maybe_play_balloons()
-        
-        _, ty, _ = st.columns(3)
-        ty.success('Thank you for voting!', icon='🥳')
-        sleep(1.5)
-        st.experimental_rerun()
-        
+    st.session_state.left_response, st.session_state.right_response = None, None
+    st.session_state.page = "review_page"
+    
+    maybe_play_balloons()
+    
+    _, ty, _ = st.columns(3)
+    ty.success('Thank you for voting!', icon='🥳')
+    sleep(1.5)
+    st.experimental_rerun()
+    
