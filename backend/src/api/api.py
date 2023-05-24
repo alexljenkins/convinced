@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from scenario.character_ai import ask_character_ai
+from src.scenario.character_ai import ask_character_ai
 
 
 # could look into https://github.com/pandera-dev/pandera/releases/tag/v0.9.0 for dataframe returns
@@ -13,8 +13,8 @@ app = FastAPI(openapi_tags=tags_metadata)
 
 
 @app.get("/ask_character_ai", tags=["Production Method"])
-async def api_character_ai(response: str):
-    response, success = ask_character_ai(response)
+async def api_character_ai(response: str, key: str):
+    response, success = ask_character_ai(response, key)
     return {'response':response, 'success':success}
 
 

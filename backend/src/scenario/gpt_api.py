@@ -3,7 +3,7 @@ import logging
 
 import openai
 
-from scenario.messages import MessageLog
+from src.scenario.messages import MessageLog
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
