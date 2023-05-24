@@ -1,6 +1,6 @@
 import pytest
 
-from src.elo import calculate_rating_change
+from api.elo import calculate_rating_change
 
 
 @pytest.mark.parametrize("current_rating, opponant_rating, outcome, expected_new_rating",

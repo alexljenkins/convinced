@@ -2,9 +2,9 @@ import logging
 
 import streamlit as st
 
-from src.database import update_entry_from_vote, get_entries_for_voting, add_to_db_log
-from src.elo import calculate_rating_change
-from src.pages.styles import hide_default_style
+from api.database import update_entry_from_vote, get_entries_for_voting, add_to_db_log
+from api.elo import calculate_rating_change
+from old.pages.styles import hide_default_style
 
 logger = logging.getLogger(__name__)
 

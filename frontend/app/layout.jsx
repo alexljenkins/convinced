@@ -6,7 +6,7 @@ import { StarsCanvas } from "@components/canvas";
 
 export const metadata = {
   title: "convinced",
-  description: "Discover & Share AI Prompts",
+  description: "Practice writing with impact",
 };
 
 const RootLayout = ({ children }) => (

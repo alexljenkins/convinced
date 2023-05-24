@@ -3,7 +3,7 @@ import random
 
 import streamlit as st
 
-from src.pages.styles import hide_default_style
+from old.pages.styles import hide_default_style
 
 def reviewed_page():
     hide_default_style()

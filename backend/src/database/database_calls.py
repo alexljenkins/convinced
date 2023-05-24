@@ -2,7 +2,6 @@ import sqlite3
 import random
 from typing import Tuple, List, Any, Union
 
-
 def db_connect():
     db = LiteConnector('convinceme')
     db.connect()

@@ -1,9 +1,9 @@
 
 from typing import Literal
-from src.database import save_entry, check_entry_against_db, update_entry_with_teacher, update_entry_with_character
-from src.elo import starting_elo
-from src.ask_ai import ask_teacher_ai, ask_character_ai
-from src.message_log import parse_teacher_reponse
+from app.api.database import save_entry, check_entry_against_db, update_entry_with_teacher, update_entry_with_character
+from app.api.elo import starting_elo
+from app.ask_ai import ask_teacher_ai, ask_character_ai
+from app.api.message_log import parse_teacher_reponse
 
 
 def too_short_validation(user_input) -> bool:

@@ -4,7 +4,9 @@ import logging
 from dataclasses import asdict
 from pydantic.dataclasses import dataclass
 import pandas as pd
+
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 @dataclass

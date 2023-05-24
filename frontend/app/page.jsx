@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import ResponseInput from "@components/ResponseInput";
 import EarthCanvas from "@components/canvas/Earth";
-
+import handleSubmit from "@components/ResponseInput";
 
 const Home = () => {
   const [submitting, setSubmitting] = useState(false);

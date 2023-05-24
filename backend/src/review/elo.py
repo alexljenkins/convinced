@@ -2,10 +2,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def starting_elo():
-    return 1200
-
-
 def calculate_rating_change(current_rating, opponant_rating, outcome=1):
     """
 
