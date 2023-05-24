@@ -2,8 +2,9 @@
 name = "convinced"
 version = "0.1.0"
 description = ""
-authors = ["alexjenkins"]
+authors = ["alexjenkins <alexljenkins89@gmail.com>"]
 readme = "README.md"
+packages = [{include = "*", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "3.9.13"
@@ -13,7 +14,7 @@ openai = "^0.27.2"
 pytest = "^7.3.1"
 fastapi = "^0.95.1"
 uvicorn = "^0.22.0"
-my_package = { path = "./src" }
+orjson = "^3.8.13"
 
 [build-system]
 requires = ["poetry-core"]
