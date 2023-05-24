@@ -1,11 +1,9 @@
+import logging
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import ORJSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.scenario.character_ai import ask_character_ai
 
-
-# could look into https://github.com/pandera-dev/pandera/releases/tag/v0.9.0 for dataframe returns
 
 tags_metadata = [
     {"name": "UAT Method", "description": "Test functionality and endpoint using UAT credentials"},
@@ -13,6 +11,8 @@ tags_metadata = [
 ]
 app = FastAPI(openapi_tags=tags_metadata)
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
 origins = [
@@ -39,15 +39,15 @@ async def handle_options(request: Request, response: Response):
 async def api_character(request: Request):
     data = await request.json()
     if data.get("key") != 'alexisthebestchuckouttherest':
-        return ORJSONResponse([{'response':"Sorry, you don't have permission to talk to me.", 'success':False}])
+        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     
     answer, success = ask_character_ai(data.get("response"))
+    logger.info('Sending response with keys: response, success!')
+    return {'response':answer, 'success':success}
 
-    return ORJSONResponse([{'response':answer, 'success':success}])
 
 @app.get("/ask_character_ai", tags=["Production Method"])
 async def api_character_ai(response: str, key: str):
-    print("I'M WHERE IM MEANT TO BE")
     if key != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
