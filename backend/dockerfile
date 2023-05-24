@@ -19,10 +19,6 @@ ENV convinced_env=${convinced_env} \
 
 RUN pip3 install "poetry==$POETRY_VERSION"
 
-# streamlit requirements
-EXPOSE 8501
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
-
 # poetry
 COPY poetry.lock pyproject.toml /app/
 RUN poetry config virtualenvs.create false \
@@ -31,4 +27,7 @@ RUN poetry config virtualenvs.create false \
 # Creating folders, and files for a project:
 COPY . /app
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+EXPOSE 6891
+ENV PORT 6891
+
+ENTRYPOINT ["uvicorn", "src.api.api:app", "--reload"]

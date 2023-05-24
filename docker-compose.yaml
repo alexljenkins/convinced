@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - 8501:8501
+      - 6891:6891
   convinced_frontend:
     build: ./frontend
     volumes:
