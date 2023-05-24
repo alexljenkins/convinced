@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 const ResponseInput = ({ submitting, handleSubmit }) => {
   const [response, setResponse] = useState("");
-  const [key, setKey] = useState("alexisthebestchuckouttherest"); // should probably not have key here
+  const [key, setKey] = useState("alexisthebestchuckouttherest");
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     setResponse(e.target.value);
@@ -11,6 +12,15 @@ const ResponseInput = ({ submitting, handleSubmit }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     console.log(response);
+
+    const wordCount = response.trim().split(/\s+/).length;
+
+    if (wordCount < 10 || wordCount > 200) {
+      setError("Response length should be between 10 and 200 words.");
+      return;
+    }
+
+    setError(""); // Reset the error state
     try {
       const apiResponse = await fetch('http://localhost:8000/api/ask_character_ai', {
         method: 'POST',
@@ -40,7 +50,10 @@ const ResponseInput = ({ submitting, handleSubmit }) => {
         placeholder='Write your message to the aliens...'
         required
         className='response_input_text_area'
+        minLength="10" // Set minimum character length to 10
+        maxLength="200" // Set maximum character length to 200
       />
+      {error && <p className="text-red-500">{error}</p>} {/* Display the error message */}
       <div className='pt-3 mx-3 mb-5 gap-4 flex-end'>
         <button
           type='submit'
