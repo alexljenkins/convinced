@@ -2,16 +2,18 @@
 import { useState } from 'react';
 import ResponseInput from "@components/ResponseInput";
 import EarthCanvas from "@components/canvas/Earth";
-import handleSubmit from "@components/ResponseInput";
+
 
 const Home = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [response, setResponse] = useState(null);
 
   const handleSubmit = (response) => {
     // Handle the response submission logic here
     console.log("Submitted response:", response);
     setSubmitting(true);
 
+    setResponse(response);
     // Simulating asynchronous submission
     setTimeout(() => {
       setSubmitting(false);
@@ -29,12 +31,18 @@ const Home = () => {
         Can you convince them not to destroy us?
       </p>
       <div className='flex-center flex-col mt-8 lg:mt-10 xl:mt-20 2xl:mb-24 bottom_spacing'></div>
+      {response ? (
+        <div className='w-full flex-center flex-col top_content'>
+          <p className="response-text">Response: {response}</p>
+        </div>
+      ) : (
         <div className='w-full flex-center flex-col top_content'>
           <ResponseInput
             submitting={submitting}
             handleSubmit={handleSubmit}
           />
-      </div>
+        </div>
+      )}
       <div className='w-full flex-center flex-col mt-14 xl:mt-4 2xl:mt-20 h-[500px] sm:h-[700px] xl:h-[800px] 2xl:h-[900px] behind_div'>
         <EarthCanvas />
       </div>

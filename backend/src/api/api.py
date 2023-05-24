@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import ORJSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.scenario.character_ai import ask_character_ai
 
@@ -12,9 +14,44 @@ tags_metadata = [
 app = FastAPI(openapi_tags=tags_metadata)
 
 
+# Configure CORS
+origins = [
+    "http://localhost:3000",  # Update with the origin of your frontend
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
+)
+
+@app.options("/api/ask_character_ai")
+async def handle_options(request: Request, response: Response):
+    response.headers["Allow"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"  # Replace with the origin of your frontend
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+
+    return response
+
+@app.post("/api/ask_character_ai")
+async def api_character(request: Request):
+    data = await request.json()
+    if data.get("key") != 'alexisthebestchuckouttherest':
+        return ORJSONResponse([{'response':"Sorry, you don't have permission to talk to me.", 'success':False}])
+    
+    answer, success = ask_character_ai(data.get("response"))
+
+    return ORJSONResponse([{'response':answer, 'success':success}])
+
 @app.get("/ask_character_ai", tags=["Production Method"])
 async def api_character_ai(response: str, key: str):
-    response, success = ask_character_ai(response, key)
+    print("I'M WHERE IM MEANT TO BE")
+    if key != 'alexisthebestchuckouttherest':
+        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+
+    response, success = ask_character_ai(response)
     return {'response':response, 'success':success}
 
 

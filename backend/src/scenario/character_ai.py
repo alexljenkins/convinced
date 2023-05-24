@@ -9,9 +9,7 @@ from src.globals import DATABASE, CHARACTER_AI, STARTING_ELO
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-def ask_character_ai(user_input:str, my_key:str) -> Tuple[str, bool]:
-    if my_key != 'alexisthebestchuckouttherest':
-        return "Sorry, you don't have permission to talk to me.", False
+def ask_character_ai(user_input:str) -> Tuple[str, bool]:
     user_error_response, passed = check_user_input(user_input)
 
     if not passed:
