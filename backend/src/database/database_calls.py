@@ -1,27 +1,30 @@
+import logging
 import sqlite3
 import random
-from typing import Tuple, List, Any, Union
+from typing import Tuple, List, Any, Union, Optional
+
+from src.database.entries import Entry, EntryCombat
+
+logger = logging.getLogger(__name__)
 
 def db_connect():
     db = LiteConnector('convinceme')
     db.connect()
     db.run_query('''
             CREATE TABLE IF NOT EXISTS convinceme_001 (
-                id INTEGER PRIMARY KEY,
+                response_id INTEGER PRIMARY KEY,
                 user_input TEXT,
-                teacher_response TEXT,
                 character_response TEXT,
                 vote_count INTEGER,
-                elo INTEGER
+                elo INTEGER,
+                enabled BOOLEAN
             )
             ''')
     db.run_query('''
                 CREATE TABLE IF NOT EXISTS convinceme_001_log (
-                    event_id INTEGER PRIMARY KEY,
+                    vote_id INTEGER PRIMARY KEY,
                     winning_response_id INTEGER,
-                    winner_new_elo INTEGER,
                     losing_response_id INTEGER,
-                    loser_new_elo INTEGER,
                     change_in_elo INTEGER
                 )
                 ''')
@@ -33,53 +36,60 @@ def print_table_contents(db, table_name:str = 'convinceme_001') -> None:
     results = db.read_data(query)
     
     for row in results:
-        print(row)
+        logger.info(row)
 
 
-def check_entry_against_db(db, user_input:str) -> Union[Tuple[str, str], Tuple[bool, bool]]:
+def check_entry_against_db(db, user_input:str) -> Union[str, bool]:
     # Check if the user input is already in the database
     entry = db.read_data(f"SELECT * FROM convinceme_001 WHERE user_input = ?", [user_input])
     # If the user input is already in the database, return the saved response
     if entry:
-        return entry[0][2], entry[0][3]
-    return False, False
+        return entry[0][2]
+    return False
 
 
-def get_entries_for_voting(db, top_group:float = 2/3, bottom_group:float = 1/3) -> Tuple[List[Any], List[Any]]:
+def get_entries_for_voting(db, split_at:float = 1/2) -> EntryCombat:
     count = db.read_data("SELECT COUNT(*) FROM convinceme_001")[0][0]
-    top_choice = random.randint(1, (count * top_group)-1)
-    bottom_choice = random.randint(count - (count * bottom_group), count - 1)
+    logger.info(f'Found {count} entries.')
+    split_at = int((count * split_at))
+    
+    top_choice = random.randint(1, split_at-1)
+    bottom_choice = random.randint(split_at, count)
 
-    query = f"SELECT * FROM convinceme_001 WHERE id IN ({top_choice}, {bottom_choice})"
+    query = f"SELECT * FROM convinceme_001 WHERE response_id IN ({top_choice}, {bottom_choice})"
 
     entries = db.read_data(query)
     random.shuffle(entries)
-    
+
     if entries[0][0] == entries[1][0]:
         raise Exception('Error - entries are the same')
-    # Return the top and bottom rows
-    return list(entries[0]), list(entries[1])
+    
+    # Return the top and bottom rows as entries with combat resolution
+    entry_a = Entry.from_list(entries[0])
+    entry_b = Entry.from_list(entries[1])
+    entries = EntryCombat(response_a = entry_a, response_b = entry_b)
+    
+    return entries
 
 
-def save_entry(db, user_input:str, teacher_response:Union[str, None], monster_response:Union[str, None], elo:int) -> None:
-    db.run_query("INSERT INTO convinceme_001 (user_input, teacher_response, monster_response, vote_count, elo) VALUES (?, ?, ?, 0, ?)", [user_input, teacher_response, monster_response, elo])
+def save_entry(db, new) -> None:
+    db.run_query("INSERT INTO convinceme_001 (user_input, character_response, vote_count, elo, enabled) VALUES (?, ?, ?, ?, ?)", new.to_db())
 
-def update_entry_with_teacher(db, user_input:str, teacher_response:str) -> None:
-    db.run_query(f"UPDATE convinceme_001 SET teacher_response = {teacher_response} WHERE id = {id} AND user_input = {user_input}")
 
 def update_entry_with_character(db, user_input:str, character_response:str) -> None:
-    db.run_query(f"UPDATE convinceme_001 SET character_response = {character_response} WHERE id = {id} AND user_input = {user_input}")
-
+    db.run_query(f"UPDATE convinceme_001 SET character_response = {character_response} WHERE response_id = {id} AND user_input = {user_input}")
 
 def update_entry_from_vote(db, id:int, elo:int, vote_count:int) -> None:
-    db.run_query(f"UPDATE convinceme_001 SET vote_count = {vote_count}, elo = {elo} WHERE id = {id}")
+    db.run_query(f"UPDATE convinceme_001 SET vote_count = {vote_count}, elo = {elo} WHERE response_id = {id}")
 
-
-def add_to_db_log(db, winning_response:list, losing_response:list, rating_change:int) -> None:
+def add_vote_to_db_log(db, winning_response:list, losing_response:list, rating_change:int) -> None:
     db.run_query(f"""
         INSERT INTO convinceme_001_log
-        (winning_response_id, winner_new_elo, losing_response_id, loser_new_elo, change_in_elo)
-        VALUES (?, ?, ?, ?, ?)""", [winning_response[0], winning_response[4], losing_response[0], losing_response[4], rating_change])
+        (winning_response_id, losing_response_id, change_in_elo)
+        VALUES (?, ?, ?)""", [winning_response[0], losing_response[0], rating_change])
+
+def delete_entry_from_vote(db, id:int) -> None:
+    db.run_query(f"DELETE FROM convinceme_001 WHERE response_id = {id}")
 
 
 class LiteConnector:
