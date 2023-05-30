@@ -96,7 +96,7 @@ async def post_responses(request: Request):
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
         entries = get_entries_for_voting(DATABASE)
-        logger.info('Got entries:\n{entries}')
+        logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
     except Exception as e:
         logger.error(e)
         return {'response':"Sorry, something went wrong.", 'success':False}
@@ -110,7 +110,7 @@ async def get_responses(key: str):
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
     entries = get_entries_for_voting(DATABASE)
-    logger.info('Got entries:\n{entries}')
+    logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
     
     return entries.get_voting_data()
 
