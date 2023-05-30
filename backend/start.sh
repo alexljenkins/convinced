@@ -1,0 +1,1 @@
+uvicorn src.api.api:app --reload
