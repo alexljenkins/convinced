@@ -20,7 +20,7 @@ class Entry(BaseModel):
             "response_id": self.response_id,
             "user_input": self.user_input,
             # "character_response": self.character_response,
-            # "vote_count": self.vote_count,
+            "vote_count": self.vote_count,
             "elo": self.elo,
             # "enabled": self.enabled
         }

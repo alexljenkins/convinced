@@ -2,7 +2,7 @@ import logging
 import sqlite3
 import random
 from typing import Tuple, List, Any, Union, Optional
-
+from datetime import datetime
 from src.database.entries import Entry, EntryCombat
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,8 @@ def db_connect():
                     vote_id INTEGER PRIMARY KEY,
                     winning_response_id INTEGER,
                     losing_response_id INTEGER,
-                    change_in_elo INTEGER
+                    change_in_elo INTEGER,
+                    created TIMESTAMP
                 )
                 ''')
     return db
@@ -82,11 +83,12 @@ def update_entry_with_character(db, user_input:str, character_response:str) -> N
 def update_entry_from_vote(db, id:int, elo:int, vote_count:int) -> None:
     db.run_query(f"UPDATE convinceme_001 SET vote_count = {vote_count}, elo = {elo} WHERE response_id = {id}")
 
-def add_vote_to_db_log(db, winning_response:list, losing_response:list, rating_change:int) -> None:
+def add_vote_to_db_log(db, winning_response_id:int, losing_response_id:int, rating_change:int) -> None:
     db.run_query(f"""
         INSERT INTO convinceme_001_log
-        (winning_response_id, losing_response_id, change_in_elo)
-        VALUES (?, ?, ?)""", [winning_response[0], losing_response[0], rating_change])
+        (winning_response_id, losing_response_id, change_in_elo, created)
+        VALUES (?, ?, ?)""", [winning_response_id, losing_response_id, rating_change, datetime.now()])
+
 
 def delete_entry_from_vote(db, id:int) -> None:
     db.run_query(f"DELETE FROM convinceme_001 WHERE response_id = {id}")
