@@ -1,16 +1,16 @@
 "use client";
 import { useState } from "react";
 
-const ResponseCard = ({ response }) => {
+const VotingCard = ({ response, onThumbsUpClick }) => {
   const [thumbsUp, setThumbsUp] = useState(false);
 
   const handleThumbsUpClick = () => {
     setThumbsUp(true);
-    // Perform any necessary action on thumbs-up click
+    onThumbsUpClick();
   };
 
   return (
-    <div className="response_card">
+    <div className="voting_card">
       <p className="my-4 font-satoshi text-sm text-gray-700">{response}</p>
 
       <div className="flex justify-center items-center mt-5">
@@ -38,4 +38,4 @@ const ResponseCard = ({ response }) => {
   );
 };
 
-export default ResponseCard;
+export default VotingCard;

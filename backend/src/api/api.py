@@ -91,6 +91,7 @@ async def post_vote(request: Request):
 @app.post("/api/collect_responses", tags=["Production Method"])
 async def post_responses(request: Request):
     data = await request.json()
+    logger.info(data)
     if data.get("key") != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
