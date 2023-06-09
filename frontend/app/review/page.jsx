@@ -29,12 +29,12 @@ const Example = () => {
         </h1>
         <p className='flex-center flex-col py-0 mt-2 sm:mt-0 xl:mt-5 bottom_spacing'></p>
         <p className='desc text-center flex-col top_content'>
-          If you were the alien, which of these messages<br />
-          would convince you more to let Earth live?
+          If you were an alien, which of these messages<br />
+          is more likely to convince you to let Earth live?
           {/* {JSON.stringify(cardcontent['response'])} */}
-          <button className='text-white black_btn' onClick={() => fetchData()}>Get Data</button>
+          {/* <button className='text-white black_btn' onClick={() => fetchData()}>Get Data</button> */}
         </p>
-        <div className="container mx-auto px-4">
+        <div className="container pt-14 mx-auto px-4">
           <div className="grid gap-4 lg:grid-cols-2 text-white">
             <div>
               <VotingCard content={JSON.stringify(cardcontent['response'][0]['user_input'])} fetcher = {fetchData} />

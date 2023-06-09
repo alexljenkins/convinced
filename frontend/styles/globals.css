@@ -180,9 +180,13 @@
 /* PromptCard Component */
 .voting_card {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter w-full h-fit;
+  font-style: italic;
+  z-index: 55;
+}
+.thumbs_up_btn_active {
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-900 bg-black bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter w-full h-fit;
   font-style: italic
 }
-
 .flex-center {
   @apply flex justify-center items-center;
 }
