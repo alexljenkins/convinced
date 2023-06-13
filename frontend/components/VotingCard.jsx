@@ -7,6 +7,7 @@ const VotingCard = ({ content, fetcher }) => {
   const [thumbsUp, setThumbsUp] = useState(false);
 
   const handleThumbsUpClick = () => {
+    // console.log('thumbs up clicked');
     setThumbsUp(true);
     fetcher();
   };

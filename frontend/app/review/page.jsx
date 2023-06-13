@@ -44,8 +44,8 @@ const Example = () => {
             </div>
           </div>
         </div>
-        <div className='w-full flex-center flex-col mt-14 xl:mt-4 2xl:mt-20 h-[500px] sm:h-[700px] xl:h-[800px] 2xl:h-[900px] behind_div'>
-        </div>
+        {/* <div className='w-full flex-center flex-col mt-14 xl:mt-4 2xl:mt-20 h-[500px] sm:h-[700px] xl:h-[800px] 2xl:h-[900px] behind_div'>
+        </div> */}
       </div>
     );
   };
