@@ -4,12 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.review.review_and_voting import vote
 from src.scenario.character_ai import ask_character_ai
-from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote
+from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries
 from src.globals import DATABASE
 
 tags_metadata = [
-    {"name": "Testing Method", "description": "Test functionality and endpoint using UAT credentials"},
-    {"name": "Production Method", "description": "Test functionality and endpoint using Production credentials"},
+    {"name": "Testing Method", "description": "Useful for running things from fastapi/docs for testing."},
+    {"name": "Production Method", "description": "Main functionality and endpoint used by frontend - expecting full json."},
+    {"name": "Inspection Method", "description": "Used by frontend to know what and how it can use it's corresponding API endpoint."},
 ]
 app = FastAPI(openapi_tags=tags_metadata)
 
@@ -40,7 +41,7 @@ async def handle_options(request: Request, response: Response):
     return response
 
 
-@app.post("/api/ask_character_ai")
+@app.post("/api/ask_character_ai", tags=["Production Method"])
 async def post_character_response(request: Request):
     data = await request.json()
     if data.get("key") != 'alexisthebestchuckouttherest':
@@ -68,22 +69,33 @@ async def post_vote(request: Request):
     data = await request.json()
     if data.get("key") != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+    
+    # TODO: check if response has "report" = True on a given response to flag as inappropriate
+    
     try:
-        vote(DATABASE, data)
+        voted_on_entries = get_specific_voted_on_entries(DATABASE, data.get("winner_id"), data.get("loser_id"))
     except Exception as e:
         logger.error(e)
-        return {'response':"Sorry, something went wrong.", 'success':False}
-    return 
+        return {'response':"Sorry, it looks like the input data couldn't be parsed.", 'success':False}
+    
+    try:
+        vote(voted_on_entries)
+    except Exception as e:
+        logger.error(e)
+        return {'response':"Sorry, it looks like the vote was not cast.", 'success':False}
+
+    return {'success':True}
 
 
 @app.post("/api/collect_responses", tags=["Production Method"])
 async def post_responses(request: Request):
     data = await request.json()
+    logger.info(data)
     if data.get("key") != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
         entries = get_entries_for_voting(DATABASE)
-        logger.info('Got entries:\n{entries}')
+        logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
     except Exception as e:
         logger.error(e)
         return {'response':"Sorry, something went wrong.", 'success':False}
@@ -97,14 +109,14 @@ async def get_responses(key: str):
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
     entries = get_entries_for_voting(DATABASE)
+    logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
     
-    logger.info('Got entries:\n{entries}')
-    
-    return entries
+    return entries.get_voting_data()
 
 
 @app.get("/api/set_disable", tags=["Testing Method"])
 async def set_disable(id: int, key: str):
+    # currently deletes entry from database, but post request could disable entry when 'reported' during review.
     if key != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 

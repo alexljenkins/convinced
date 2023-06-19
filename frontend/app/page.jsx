@@ -27,14 +27,14 @@ const Home = () => {
       </h1>
       <p className='flex-center flex-col py-0 mt-2 sm:mt-0 xl:mt-5 bottom_spacing'></p>
       {response ? (
-        <div className='flex-center flex-col mt-8 lg:mt-10 xl:mt-20 2xl:mb-24 bottom_spacing'></div>
+        <div className='flex-center flex-col mt-8 lg:mt-10 xl:mt-16 2xl:mb-20 bottom_spacing'></div>
         ) : (
           <p className='desc text-center flex-col top_content'>
             An advanced alien ship is on its way to Earth...<br />
             Can you convince them not to destroy us?
           </p>
       )}
-      <div className='flex-center flex-col mt-8 lg:mt-10 xl:mt-20 2xl:mb-24 bottom_spacing'></div>
+      <div className='flex-center flex-col mt-20 xl:mt-20 2xl:mb-24 bottom_spacing'></div>
       
       {response ? (
         <div className='flex-center flex-col top_content'>

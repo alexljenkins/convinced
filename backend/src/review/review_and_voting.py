@@ -1,17 +1,21 @@
 import logging
+from typing import List
 
-from src.database.database_calls import add_vote_to_db_log, update_entry_from_vote
+from src.globals import DATABASE
+from src.database.database_calls import add_vote_to_db_log, update_entry_from_vote, get_specific_voted_on_entries
+from src.database.entries import Entry, EntryCombat, calculate_rating_change
 
 logger = logging.getLogger(__name__)
 
 
-def vote(db, response):
+def vote(entries:EntryCombat):
+    entries.set_if_wins()
+    rating_change = entries.response_a.if_wins
+    # update winner's rating
+    update_entry_from_vote(DATABASE, entries.response_a.response_id, entries.response_a.elo + rating_change, entries.response_a.vote_count+1)
     
-    winning_response[5] += rating_change
-    update_entry_from_vote(db = db, id = winning_response[0], elo = winning_response[5], vote_count = winning_response[4] + 1)
+    # update loser's rating
+    update_entry_from_vote(DATABASE, entries.response_b.response_id, entries.response_b.elo - rating_change, entries.response_b.vote_count)
     
-    # loser
-    losing_response[5] -= rating_change
-    update_entry_from_vote(db = db, id = losing_response[0], elo = losing_response[5], vote_count = losing_response[4] + 1)
-
-    add_vote_to_db_log(db, winning_response, losing_response, rating_change)
+    add_vote_to_db_log(DATABASE, entries.response_a.response_id, entries.response_b.response_id, rating_change)
+    logger.info(f"Vote for {entries.response_a.response_id} cast over {entries.response_b.response_id} for {rating_change} points.")
