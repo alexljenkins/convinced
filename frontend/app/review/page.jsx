@@ -31,21 +31,17 @@ const Example = () => {
         <p className='desc text-center flex-col top_content'>
           If you were an alien, which of these messages<br />
           is more likely to convince you to let Earth live?
-          {/* {JSON.stringify(cardcontent['response'])} */}
-          {/* <button className='text-white black_btn' onClick={() => fetchData()}>Get Data</button> */}
         </p>
         <div className="container pt-14 mx-auto px-4">
           <div className="grid gap-4 lg:grid-cols-2 text-white">
             <div>
-              <VotingCard content={JSON.stringify(cardcontent['response'][0]['user_input'])} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][0]} fetcher = {fetchData} />
             </div>
             <div>
-              <VotingCard content={JSON.stringify(cardcontent['response'][1]['user_input'])} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][1]} fetcher = {fetchData} />
             </div>
           </div>
         </div>
-        {/* <div className='w-full flex-center flex-col mt-14 xl:mt-4 2xl:mt-20 h-[500px] sm:h-[700px] xl:h-[800px] 2xl:h-[900px] behind_div'>
-        </div> */}
       </div>
     );
   };

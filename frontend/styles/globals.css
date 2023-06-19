@@ -166,7 +166,7 @@
 
 /* Nav Component */
 .logo_text {
-  @apply max-sm:hidden font-satoshi font-semibold text-lg text-gray-300 tracking-wide;
+  @apply max-sm:hidden font-satoshi text-gray-300 tracking-wide;
 }
 
 .dropdown {

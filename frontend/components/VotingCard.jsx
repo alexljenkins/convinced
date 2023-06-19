@@ -9,21 +9,24 @@ const VotingCard = ({ content, fetcher }) => {
   const handleThumbsUpClick = () => {
     // console.log('thumbs up clicked');
     setThumbsUp(true);
-    fetcher();
+    // wait 1 second
+    setTimeout(() => {
+      setThumbsUp(false);
+      fetcher();
+    }, 1000);
   };
 
   return (
     <div className="voting_card cursor-pointer" onClick={handleThumbsUpClick}>
       
-      <p className="my-4 font-satoshi text-sm text-white">{content}</p>
-
-      {/* <div className="flex justify-center items-center mt-5"> */}
-        {/* <button
-          onClick={handleThumbsUpClick}
-          className={`thumbs_up_btn ${thumbsUp ? 'thumbs_up_btn_active' : ''}`}
-        >
-        </button> */}
-      {/* </div> */}
+      <p className="my-4 font-satoshi text-sm text-white">{JSON.stringify(content['user_input'])}</p>
+      {thumbsUp ? (
+        <div className='flex-center flex-col'>
+          <p className='ai_response text-center flex-col'> +{JSON.stringify(content['if_wins'])} points</p>
+        </div>
+        ) : (
+          <div></div>
+        )}
     </div>
   );
 };
