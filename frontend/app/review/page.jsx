@@ -35,10 +35,10 @@ const Example = () => {
         <div className="container pt-14 mx-auto px-4">
           <div className="grid gap-4 lg:grid-cols-2 text-white">
             <div>
-              <VotingCard content={cardcontent['response'][0]} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchData} />
             </div>
             <div>
-              <VotingCard content={cardcontent['response'][1]} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][1]} other_id={parseInt(cardcontent['response'][0]['response_id'])} fetcher = {fetchData} />
             </div>
           </div>
         </div>
@@ -50,12 +50,3 @@ const Example = () => {
 };
 
 export default Example;
-
-//   const handleThumbsUpClick = async () => {
-//     try {
-//       await fetchData();
-//       console.log('Response:', response);
-//     } catch (error) {
-//       console.error("Error fetching data:", error);
-//     }
-//   };
