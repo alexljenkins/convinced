@@ -10,6 +10,7 @@ class Entry(BaseModel):
     vote_count: int = 0
     elo: int = 1200
     enabled: bool = True
+    if_wins:int = 0
 
     @classmethod
     def from_list(cls, values):
@@ -32,6 +33,10 @@ class Entry(BaseModel):
 class EntryCombat(BaseModel):
     response_a: Entry
     response_b: Entry
+
+    def set_if_wins(self):
+        self.response_a.if_wins = calculate_rating_change(self.response_a.elo, self.response_b.elo, outcome=1)
+        self.response_b.if_wins = calculate_rating_change(self.response_b.elo, self.response_a.elo, outcome=1)
 
     def get_voting_data(self):
         response_a = self.response_a.to_dict()

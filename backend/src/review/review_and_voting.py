@@ -2,36 +2,20 @@ import logging
 from typing import List
 
 from src.globals import DATABASE
-from src.database.database_calls import add_vote_to_db_log, update_entry_from_vote
-from src.database.entries import Entry, EntryCombat
+from src.database.database_calls import add_vote_to_db_log, update_entry_from_vote, get_specific_voted_on_entries
+from src.database.entries import Entry, EntryCombat, calculate_rating_change
 
 logger = logging.getLogger(__name__)
 
 
-
-def parse_vote_api_data(api_vote_data) -> List[Entry]:
+def vote(entries:EntryCombat):
+    entries.set_if_wins()
+    rating_change = entries.response_a.if_wins
+    # update winner's rating
+    update_entry_from_vote(DATABASE, entries.response_a.response_id, entries.response_a.elo + rating_change, entries.response_a.vote_count+1)
     
-    entries = []
-    for item in api_vote_data:
-        entry = Entry(
-            response_id=int(item.get('response_id')),
-            user_input=item.get('user_input'),
-            vote_count=int(item.get('vote_count')),
-            elo=int(item.get('elo')),
-        )
-        entry['if_wins'] = int(item.get('if_wins'))
-        entries.append(entry)
+    # update loser's rating
+    update_entry_from_vote(DATABASE, entries.response_b.response_id, entries.response_b.elo - rating_change, entries.response_b.vote_count)
     
-    return entries
-
-
-def vote(entries:List[Entry], winner_id:int):
-    for entry in entries:
-        if entry.response_id == winner_id:
-            update_entry_from_vote(DATABASE, entry.response_id, entry.elo + entry.if_wins, entry.vote_count+1)
-            rating_change = entry.if_wins
-        else:  # update as loser
-            update_entry_from_vote(DATABASE, entry.response_id, entry.elo - entry.if_wins, entry.vote_count)
-            loser_id = entry.response_id
-    
-    add_vote_to_db_log(DATABASE, winner_id, loser_id, rating_change)
+    add_vote_to_db_log(DATABASE, entries.response_a.response_id, entries.response_b.response_id, rating_change)
+    logger.info(f"Vote for {entries.response_a.response_id} cast over {entries.response_b.response_id} for {rating_change} points.")

@@ -2,9 +2,9 @@ import logging
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.review.review_and_voting import parse_vote_api_data, vote
+from src.review.review_and_voting import vote
 from src.scenario.character_ai import ask_character_ai
-from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote
+from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries
 from src.globals import DATABASE
 
 tags_metadata = [
@@ -73,19 +73,18 @@ async def post_vote(request: Request):
     # TODO: check if response has "report" = True on a given response to flag as inappropriate
     
     try:
-        entries = parse_vote_api_data(data.get("voting_data"))
+        voted_on_entries = get_specific_voted_on_entries(DATABASE, data.get("winner_id"), data.get("loser_id"))
     except Exception as e:
         logger.error(e)
         return {'response':"Sorry, it looks like the input data couldn't be parsed.", 'success':False}
     
     try:
-        vote(entries, data.get["winner_id"])
+        vote(voted_on_entries)
     except Exception as e:
         logger.error(e)
-        return {'response':"Sorry, it looks like the input data couldn't be parsed.", 'success':False}
+        return {'response':"Sorry, it looks like the vote was not cast.", 'success':False}
 
-    # return 2 new user inputs for voting
-    return {'response':get_entries_for_voting(DATABASE).get_voting_data(), 'success':True}
+    return {'success':True}
 
 
 @app.post("/api/collect_responses", tags=["Production Method"])

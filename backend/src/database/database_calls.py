@@ -72,6 +72,23 @@ def get_entries_for_voting(db, split_at:float = 1/2) -> EntryCombat:
     
     return entries
 
+def get_specific_voted_on_entries(db, winner_id:int, loser_id:int) -> EntryCombat:
+    query = f"SELECT * FROM convinceme_001 WHERE response_id IN ({int(winner_id)}, {int(loser_id)})"
+    entries = db.read_data(query)
+
+    if len(entries) != 2:
+        raise Exception(f'Error {len(entries)} found. Expected 2.')
+    
+    # always put winner as entry_a/response_a
+    if entries[0][0] == winner_id:
+        entry_a = Entry.from_list(entries[0])
+        entry_b = Entry.from_list(entries[1])
+    else:
+        entry_a = Entry.from_list(entries[1])
+        entry_b = Entry.from_list(entries[0])
+    entries = EntryCombat(response_a = entry_a, response_b = entry_b)
+    return entries
+
 
 def save_entry(db, new) -> None:
     db.run_query("INSERT INTO convinceme_001 (user_input, character_response, vote_count, elo, enabled) VALUES (?, ?, ?, ?, ?)", new.to_db())
@@ -87,7 +104,7 @@ def add_vote_to_db_log(db, winning_response_id:int, losing_response_id:int, rati
     db.run_query(f"""
         INSERT INTO convinceme_001_log
         (winning_response_id, losing_response_id, change_in_elo, created)
-        VALUES (?, ?, ?)""", [winning_response_id, losing_response_id, rating_change, datetime.now()])
+        VALUES (?, ?, ?, ?)""", [winning_response_id, losing_response_id, rating_change, datetime.now()])
 
 
 def delete_entry_from_vote(db, id:int) -> None:
