@@ -3,7 +3,7 @@ import sqlite3
 import random
 from typing import Tuple, List, Any, Union, Optional
 from datetime import datetime
-from src.database.entries import Entry, EntryCombat
+from database.entries import Entry, EntryCombat
 
 logger = logging.getLogger(__name__)
 

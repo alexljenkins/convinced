@@ -1,6 +1,6 @@
 import pytest
 
-from src.database.entries import calculate_rating_change
+from database.entries import calculate_rating_change
 
 
 @pytest.mark.parametrize("current_rating, opponant_rating, outcome, expected_new_rating",

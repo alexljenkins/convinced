@@ -2,10 +2,10 @@ import logging
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.review.review_and_voting import vote
-from src.scenario.character_ai import ask_character_ai
-from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries, report_response_id
-from src.globals import DATABASE
+from review.review_and_voting import vote
+from scenario.character_ai import ask_character_ai
+from database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries, report_response_id
+from globals import DATABASE
 
 tags_metadata = [
     {"name": "Testing Method", "description": "Useful for running things from fastapi/docs for testing."},
