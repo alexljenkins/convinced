@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 const ResponseInput = ({ submitting, handleSubmit }) => {
+  const apiKey = process.env.API_KEY;
   const [response, setResponse] = useState("");
-  const [key, setKey] = useState("alexisthebestchuckouttherest");
+  const [key, setKey] = useState(apiKey);
   const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
