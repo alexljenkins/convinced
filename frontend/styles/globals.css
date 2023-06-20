@@ -183,6 +183,14 @@
   font-style: italic;
   z-index: 55;
 }
+.voting_card:hover {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  background-color: rgba(39, 110, 66, 0.5);
+}
+/* .voting_card:hover {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  background-color: rgba(22, 22, 28, 0.9);
+} */
 .thumbs_up_btn_active {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-900 bg-black bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter w-full h-fit;
   font-style: italic
@@ -190,7 +198,7 @@
 
 .voted_bg {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-900;
-  background-color:rgba(0, 128, 0, 0.5);
+  background-color:rgba(18, 52, 31, 0.5);
   font-style: italic;
   z-index: 55;
 }

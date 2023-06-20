@@ -7,6 +7,7 @@ from src.database.entries import Entry, EntryCombat
 
 logger = logging.getLogger(__name__)
 
+# DATABASE.run_query(f"ALTER TABLE convinceme_001 ADD COLUMN report_count INTEGER DEFAULT 0")
 def db_connect():
     db = LiteConnector('convinceme')
     db.connect()
@@ -17,7 +18,8 @@ def db_connect():
                 character_response TEXT,
                 vote_count INTEGER,
                 elo INTEGER,
-                enabled BOOLEAN
+                enabled BOOLEAN DEFAULT TRUE,
+                report_count INTEGER DEFAULT 0
             )
             ''')
     db.run_query('''
@@ -26,6 +28,13 @@ def db_connect():
                     winning_response_id INTEGER,
                     losing_response_id INTEGER,
                     change_in_elo INTEGER,
+                    created TIMESTAMP
+                )
+                ''')
+    db.run_query('''
+                CREATE TABLE IF NOT EXISTS convinceme_001_report_log (
+                    report_id INTEGER PRIMARY KEY,
+                    response_id INTEGER,
                     created TIMESTAMP
                 )
                 ''')
@@ -49,20 +58,13 @@ def check_entry_against_db(db, user_input:str) -> Union[str, bool]:
     return False
 
 
-def get_entries_for_voting(db, split_at:float = 1/2) -> EntryCombat:
-    count = db.read_data("SELECT COUNT(*) FROM convinceme_001")[0][0]
-    logger.info(f'Found {count} entries.')
-    split_at = int((count * split_at))
-    
-    top_choice = random.randint(1, split_at-1)
-    bottom_choice = random.randint(split_at, count)
-
-    query = f"SELECT * FROM convinceme_001 WHERE response_id IN ({top_choice}, {bottom_choice})"
-
+def get_entries_for_voting(db) -> EntryCombat:
+    query = f"SELECT * FROM convinceme_001 WHERE enabled != FALSE AND report_count <= 3 ORDER BY RANDOM() LIMIT 2"
     entries = db.read_data(query)
-    random.shuffle(entries)
+    # random.shuffle(entries)
 
     if entries[0][0] == entries[1][0]:
+        # get_entries_for_voting(db)
         raise Exception('Error - entries are the same')
     
     # Return the top and bottom rows as entries with combat resolution
@@ -105,6 +107,16 @@ def add_vote_to_db_log(db, winning_response_id:int, losing_response_id:int, rati
         INSERT INTO convinceme_001_log
         (winning_response_id, losing_response_id, change_in_elo, created)
         VALUES (?, ?, ?, ?)""", [winning_response_id, losing_response_id, rating_change, datetime.now()])
+
+def report_response_id(db, response_id:int):
+    # add to log
+    db.run_query(f"""
+        INSERT INTO convinceme_001_report_log
+        (response_id, created)
+        VALUES (?, ?)""", [response_id, datetime.now()])
+    
+    # add to snapshot table
+    db.run_query(f"""UPDATE convinceme_001 SET report_count = report_count + ? WHERE response_id = ?""", [1, response_id])
 
 
 def delete_entry_from_vote(db, id:int) -> None:
