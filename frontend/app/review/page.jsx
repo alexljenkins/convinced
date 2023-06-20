@@ -3,19 +3,30 @@ import VotingCard from "@components/VotingCard";
 
 import { useState, useEffect } from 'react';
 
-const Example = () => {
-  const [cardcontent, setCardContent] = useState({ 'response': [{ 'user_input': 'Loading Data' },{'user_input': 'Please Wait...'}]});
+const reviewPage = () => {
+  const [cardcontent, setCardContent] = useState({ 'response': [{ 'user_input': 'Sending message to space' }, {'user_input': 'Please Wait...'}]});
   
   const fetchData = async () => {
-    const apiResponse = await fetch('http://localhost:8000/api/collect_responses', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',},
-      body: JSON.stringify({ "key": "alexisthebestchuckouttherest" }),
-    });
-
-    const data = await apiResponse.json();
-    setCardContent(data);
-  };
+    const apiKey = process.env.API_KEY;
+    try {
+      const apiResponse = await fetch('http://localhost:8000/api/collect_responses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify({ "key": apiKey }),
+      });
+    if (apiResponse.ok) {
+      const data = await apiResponse.json();
+      setCardContent(data);
+    } else {
+      // Handle the error response
+      console.error('Request failed with status:', response.status);
+      setCardContent({'response': [{ 'user_input': 'Earth is sleeping' }, { 'user_input': 'Earth is sleeping' }]});
+    }
+  } catch (error) {
+  console.error('An error occurred:', error);
+  setCardContent({'response': [{ 'user_input': 'Earth is sleeping...' }, { 'user_input': 'Earth is sleeping...' }]});
+  }
+};
   useEffect(() => {
     if (cardcontent.response[0].user_input === 'Loading Data') {
       fetchData();
@@ -49,4 +60,4 @@ const Example = () => {
   return renderContent();
 };
 
-export default Example;
+export default reviewPage;

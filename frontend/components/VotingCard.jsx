@@ -8,15 +8,17 @@ const VotingCard = ({ content, other_id, fetcher }) => {
   const [thumbsUp, setThumbsUp] = useState(false);
   const [showReportButton, setShowReportButton] = useState(false);
   const [showReportOverlay, setShowReportOverlay] = useState(false);
+  const apiKey = process.env.API_KEY;
 
   const sendVote = useCallback(async (winnerId, other_id, ifWinsValue) => {
     console.log('Sending data: ', winnerId, other_id, ifWinsValue);
+    
     try {
       const response = await fetch('http://localhost:8000/api/vote', {
         method: 'POST',
           headers: {'Content-Type': 'application/json',},
           body: JSON.stringify({
-            "key": "alexisthebestchuckouttherest",
+            "key": apiKey,
             "winner_id": winnerId,
             "loser_id": other_id,
             "points_change": ifWinsValue
@@ -49,12 +51,13 @@ const VotingCard = ({ content, other_id, fetcher }) => {
 
   const handleReportClick = useCallback(async (report_id) => {
     console.log("Report button clicked");
+    const apiKey = process.env.API_KEY;
     try {
       const response = await fetch('http://localhost:8000/api/report', {
         method: 'POST',
           headers: {'Content-Type': 'application/json',},
           body: JSON.stringify({
-            "key": "alexisthebestchuckouttherest",
+            "key": apiKey,
             "response_id": report_id
           }),
         });
