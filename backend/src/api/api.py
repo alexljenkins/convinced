@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.review.review_and_voting import vote
 from src.scenario.character_ai import ask_character_ai
-from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries
+from src.database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries, report_response_id
 from src.globals import DATABASE
 
 tags_metadata = [
@@ -90,7 +90,6 @@ async def post_vote(request: Request):
 @app.post("/api/collect_responses", tags=["Production Method"])
 async def post_responses(request: Request):
     data = await request.json()
-    logger.info(data)
     if data.get("key") != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
@@ -114,8 +113,37 @@ async def get_responses(key: str):
     return entries.get_voting_data()
 
 
-@app.get("/api/set_disable", tags=["Testing Method"])
-async def set_disable(id: int, key: str):
+@app.post("/api/report", tags=["Production Method"])
+async def post_report(request: Request):
+    data = await request.json()
+    if data.get("key") != 'alexisthebestchuckouttherest':
+        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+    reported_id = data.get("response_id")
+    try:
+        report_response_id(DATABASE, reported_id)
+    except Exception as e:
+        logger.error(e)
+        return {'response':"Sorry, something went wrong.", 'success':False}
+    logger.info(f"Report content with id {reported_id}, successful.")
+    return {'success':True}
+
+
+@app.get("/api/report", tags=["Testing Method"])
+async def get_report(key:str, response_id: int):
+    if key != 'alexisthebestchuckouttherest':
+        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+    try:
+        report_response_id(DATABASE, response_id)
+    except Exception as e:
+        logger.error(e)
+        return {'response':"Sorry, something went wrong.", 'success':False}
+    logger.info(f"Report content with id {response_id}, successful.")
+    
+    return {'success': True}
+
+
+@app.get("/api/set_delete", tags=["Testing Method"])
+async def set_delete(id: int, key: str):
     # currently deletes entry from database, but post request could disable entry when 'reported' during review.
     if key != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
