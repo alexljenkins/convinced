@@ -1,6 +1,6 @@
 "use client";
-import { sendError } from "next/dist/server/api-utils";
-import { useState, useEffect, useCallback} from "react";
+// import { sendError } from "next/dist/server/api-utils";
+import { useState, useCallback} from "react";
 
 const VotingCard = ({ content, other_id, fetcher }) => {
 
@@ -119,7 +119,7 @@ return (
       ) : null}
         {showReportOverlay && (
           <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-red-500 font-bold bg-opacity-75 text-white z-20">
-            <p className="text-center">Message Reported</p>
+            <p className="text-center">Message reported. Thank you</p>
           </div>
         )}
     </div>
