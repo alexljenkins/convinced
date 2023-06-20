@@ -3,8 +3,7 @@ name = "convinced"
 version = "0.1.0"
 description = ""
 authors = ["alexjenkins <alexljenkins89@gmail.com>"]
-readme = "README.md"
-packages = [{include = "*", from = "src"}]
+packages = [{include = "*", from = "src/"}]
 
 [tool.poetry.dependencies]
 python = "3.9.13"

@@ -3,12 +3,12 @@ services:
   convinced_backend:
     build: ./backend
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
-      - 6891:6891
+      - 8000:8000
   convinced_frontend:
     build: ./frontend
     volumes:
-      - .:/app
+      - ./frontend:/app
     ports:
       - 3002:3002

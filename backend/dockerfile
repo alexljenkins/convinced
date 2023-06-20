@@ -6,10 +6,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-ARG convinced_env
-
-ENV convinced_env=${convinced_env} \
-    PYTHONFAULTHANDLER=1 \
+ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
     PIP_NO_CACHE_DIR=off \
@@ -17,17 +14,17 @@ ENV convinced_env=${convinced_env} \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.4.2
 
-RUN pip3 install "poetry==$POETRY_VERSION"
+RUN pip install "poetry==$POETRY_VERSION"
 
-# poetry
-COPY poetry.lock pyproject.toml /app/
+COPY pyproject.toml poetry.lock /app/
+COPY src /app/src
+
 RUN poetry config virtualenvs.create false \
-    && poetry install $("$convinced_env" == production && echo "--no-dev") --no-interaction --no-ansi
-
-# Creating folders, and files for a project:
-COPY . /app
+    && poetry install --only main --no-interaction --no-ansi
 
 EXPOSE 6891
 ENV PORT 6891
 
-ENTRYPOINT ["uvicorn", "src.api.api:app", "--reload"]
+# ENTRYPOINT ["bash", "-c", "ls -R $PWD"] # confirmed only backend stuff exists here
+# ENTRYPOINT ["uvicorn", "app.src.app:app", "--reload"]
+ENTRYPOINT ["python", "/app/src/app.py"]
