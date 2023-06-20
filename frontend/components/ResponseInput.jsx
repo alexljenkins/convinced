@@ -3,7 +3,7 @@ import { useState } from 'react';
 const ResponseInput = ({ submitting, handleSubmit }) => {
   const apiKey = process.env.API_KEY;
   const [response, setResponse] = useState("");
-  const [key, setKey] = useState(apiKey);
+  // const [key, setKey] = useState(apiKey);
   const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
@@ -28,7 +28,7 @@ const ResponseInput = ({ submitting, handleSubmit }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ response, key }),
+        body: JSON.stringify({ response, apiKey }),
       });
 
       if (apiResponse.ok) {
