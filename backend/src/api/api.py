@@ -1,10 +1,13 @@
 import logging
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.models import APIKey
 
 from review.review_and_voting import vote
 from scenario.character_ai import ask_character_ai
-from database.database_calls import get_entries_for_voting, print_table_contents, delete_entry_from_vote, get_specific_voted_on_entries, report_response_id
+from database.database_calls import get_entries_for_voting, delete_entry_from_vote, get_specific_voted_on_entries, report_response_id
+from api import auth
+
 from globals import DATABASE
 
 tags_metadata = [
@@ -26,7 +29,7 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["POST", "GET", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 @app.options("/api/vote")
@@ -42,9 +45,10 @@ async def handle_options(request: Request, response: Response):
 
 
 @app.post("/api/ask_character_ai", tags=["Production Method"])
-async def post_character_response(request: Request):
+async def post_character_response(request: Request, apiKey: APIKey = Depends(auth.get_api_key)):
     data = await request.json()
-    if data.get("key") != 'alexisthebestchuckouttherest':
+    if apiKey != 'alexisthebestchuckouttherest':
+        logger.info(f"Key not correct: {data.get('key')}")
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
         answer, success = ask_character_ai(data.get("response"))
@@ -58,6 +62,7 @@ async def post_character_response(request: Request):
 @app.get("/api/ask_character_ai", tags=["Testing Method"])
 async def get_character_response(response: str, key: str):
     if key != 'alexisthebestchuckouttherest':
+        logger.info(f"Key not correct: {key}")
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
     response, success = ask_character_ai(response)
@@ -65,9 +70,9 @@ async def get_character_response(response: str, key: str):
 
 
 @app.post("/api/vote", tags=["Production Method"])
-async def post_vote(request: Request):
+async def post_vote(request: Request, apiKey: str = Header(...)):
     data = await request.json()
-    if data.get("key") != 'alexisthebestchuckouttherest':
+    if apiKey != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     
     # TODO: check if response has "report" = True on a given response to flag as inappropriate
@@ -88,10 +93,9 @@ async def post_vote(request: Request):
 
 
 @app.post("/api/collect_responses", tags=["Production Method"])
-async def post_responses(request: Request):
+async def post_responses(request: Request, access_token: APIKey = Depends(auth.get_api_key)):
     data = await request.json()
-    if data.get("key") != 'alexisthebestchuckouttherest':
-        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+    logger.info(f"At least you got into the api with {data}")
     try:
         entries = get_entries_for_voting(DATABASE)
         logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
@@ -103,9 +107,9 @@ async def post_responses(request: Request):
 
 
 @app.get("/api/collect_responses", tags=["Testing Method"])
-async def get_responses(key: str):
-    if key != 'alexisthebestchuckouttherest':
-        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+async def get_responses(access_token: APIKey = Depends(auth.get_api_key)):
+    # if key != 'alexisthebestchuckouttherest':
+    #     return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
     entries = get_entries_for_voting(DATABASE)
     logger.info(f"Returning entries: {entries.response_a.response_id} AND {entries.response_b.response_id}")
@@ -114,9 +118,9 @@ async def get_responses(key: str):
 
 
 @app.post("/api/report", tags=["Production Method"])
-async def post_report(request: Request):
+async def post_report(request: Request, apiKey: str = Header(...)):
     data = await request.json()
-    if data.get("key") != 'alexisthebestchuckouttherest':
+    if apiKey != 'alexisthebestchuckouttherest':
         return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     reported_id = data.get("response_id")
     try:
@@ -129,9 +133,9 @@ async def post_report(request: Request):
 
 
 @app.get("/api/report", tags=["Testing Method"])
-async def get_report(key:str, response_id: int):
-    if key != 'alexisthebestchuckouttherest':
-        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
+async def get_report(response_id: int, access_token: APIKey = Depends(auth.get_api_key)):
+    # if key != 'alexisthebestchuckouttherest':
+    #     return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
     try:
         report_response_id(DATABASE, response_id)
     except Exception as e:
@@ -143,15 +147,19 @@ async def get_report(key:str, response_id: int):
 
 
 @app.get("/api/set_delete", tags=["Testing Method"])
-async def set_delete(id: int, key: str):
+async def set_delete(id: int, access_token: APIKey = Depends(auth.get_api_key)):
     # currently deletes entry from database, but post request could disable entry when 'reported' during review.
-    if key != 'alexisthebestchuckouttherest':
-        return {'response':"Sorry, you don't have permission to talk to me.", 'success':False}
 
     delete_entry_from_vote(DATABASE, id)
     logger.info(f'Deleted entry with id: {id}.')
     
     return {'success':True}
+
+@app.get("/secure")
+async def info(access_token: APIKey = Depends(auth.get_api_key)):
+    return {
+        "set_key": access_token
+    }
 
 if __name__ == "__main__":
     # print_table_contents(DATABASE)
