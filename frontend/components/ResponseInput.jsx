@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import { Button, Loading } from "@nextui-org/react";
+// https://nextui.org/docs/components/button
 
-const ResponseInput = ({ submitting, handleSubmit }) => {
-  const apiKey = process.env.API_KEY;
+import { submitEarthlingsMessage } from "@components/api/InputSubmit";
+{/* <Button disabled auto bordered color="primary" css={{ px: "$13" }}>
+  <Loading color="currentColor" size="sm" />
+</Button> */}
+
+
+const ResponseInput = ({ handleAIResponse }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState("");
-  // const [key, setKey] = useState(apiKey);
   const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
@@ -11,61 +18,46 @@ const ResponseInput = ({ submitting, handleSubmit }) => {
   };
 
   const handleFormSubmit = async (e) => {
+    setIsSubmitting(true);
     e.preventDefault();
+    setError("");
+    // await new Promise((r) => setTimeout(r, 10000)); // wait 10 seconds for testing
     console.log(response);
-
     const wordCount = response.trim().split(/\s+/).length;
 
     if (wordCount < 10 || wordCount > 200) {
       setError("Response length should be between 10 and 200 words.");
+      setIsSubmitting(false);
       return;
     }
+    handleAIResponse(submitEarthlingsMessage(response));
+    setIsSubmitting(false);
+    };
 
-    setError(""); // Reset the error state
-    try {
-      const apiResponse = await fetch('http://localhost:8000/api/ask_character_ai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ response, apiKey }),
-      });
-
-      if (apiResponse.ok) {
-        const data = await apiResponse.json();
-        console.log('Response received from backend:', data.response);
-        handleSubmit(data.response); // Handle the response here
-      } else {
-        console.error('Failed to send request to backend');
-      }
-    } catch (error) {
-      console.error('An error occurred while sending the request to backend:', error);
-    }
+    return (
+      <form onSubmit={handleFormSubmit} className='w-full max-w-2xl flex flex-col'>
+        <textarea
+          value={response}
+          onChange={handleInputChange}
+          placeholder='Write your message to the aliens...'
+          required
+          className='response_input_text_area'
+          // minLength="20" // Set minimum character length to 10
+          // maxLength="800" // Set maximum character length to 800
+          disabled={isSubmitting}
+        />
+        {error && <p className="text-red-500">{error}</p>} {/* Display the error message */}
+        <div className='pt-3 mx-3 mb-5 gap-4 flex-end'>
+          <Button bordered color="error" auto
+            type='submit'
+            disabled={isSubmitting}
+            className='w-full md:w-auto text-lg px-8 py-1.5 bg-primary-orange rounded-lg text-white md:text-sm md:px-5'
+          >
+            {isSubmitting ? `Sending...` : 'Send Message'}
+          </Button>
+        </div>
+      </form>
+    );
   };
-
-  return (
-    <form onSubmit={handleFormSubmit} className='w-full max-w-2xl flex flex-col'>
-      <textarea
-        value={response}
-        onChange={handleInputChange}
-        placeholder='Write your message to the aliens...'
-        required
-        className='response_input_text_area'
-        minLength="10" // Set minimum character length to 10
-        maxLength="200" // Set maximum character length to 200
-      />
-      {error && <p className="text-red-500">{error}</p>} {/* Display the error message */}
-      <div className='pt-3 mx-3 mb-5 gap-4 flex-end'>
-        <button
-          type='submit'
-          disabled={submitting}
-          className='w-full md:w-auto text-lg px-8 py-1.5 bg-primary-orange rounded-lg text-white md:text-sm md:px-5'
-        >
-          {submitting ? `Sending...` : 'Submit'}
-        </button>
-      </div>
-    </form>
-  );
-};
 
 export default ResponseInput;

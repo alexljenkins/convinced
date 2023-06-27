@@ -5,19 +5,12 @@ import EarthCanvas from "@components/canvas/Earth";
 
 
 const Home = () => {
-  const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
 
-  const handleSubmit = (response) => {
+  const handleAIResponse = (response) => {
     // Handle the response submission logic here
-    console.log("Submitted response:", response);
-    setSubmitting(true);
-
+    console.log("AI Response:", response);
     setResponse(response);
-    // Simulating asynchronous submission
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 20000);
   };
 
   return (
@@ -42,7 +35,7 @@ const Home = () => {
         </div>
         ) : (
           <div className='w-full flex-center flex-col top_content'>
-            <ResponseInput submitting={submitting} handleSubmit={handleSubmit} />
+            <ResponseInput handleAIResponse={handleAIResponse} />
           </div>
         )}
       
@@ -54,5 +47,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
