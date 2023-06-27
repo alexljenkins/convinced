@@ -1,37 +1,22 @@
 "use client"
 import VotingCard from "@components/VotingCard";
-
+import { fetchReviewData } from '@components/api/ReviewData';
 import { useState, useEffect } from 'react';
 
 const reviewPage = () => {
   const [cardcontent, setCardContent] = useState({ 'response': [{ 'user_input': 'Sending message to space' }, {'user_input': 'Please Wait...'}]});
   
-  const fetchData = async () => {
-    const apiKey = process.env.API_KEY;
-    try {
-      const apiResponse = await fetch('http://localhost:8000/api/collect_responses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: JSON.stringify({ "key": apiKey }),
-      });
-    if (apiResponse.ok) {
-      const data = await apiResponse.json();
-      setCardContent(data);
-    } else {
-      // Handle the error response
-      console.error('Request failed with status:', response.status);
-      setCardContent({'response': [{ 'user_input': 'Earth is sleeping' }, { 'user_input': 'Earth is sleeping' }]});
-    }
-  } catch (error) {
-  console.error('An error occurred:', error);
-  setCardContent({'response': [{ 'user_input': 'Earth is sleeping...' }, { 'user_input': 'Earth is sleeping...' }]});
-  }
-};
+  const fetchCardContent = async () => {
+    const data = await fetchReviewData();
+    setCardContent(data);
+  };
+
   useEffect(() => {
-    if (cardcontent.response[0].user_input === 'Loading Data') {
-      fetchData();
+    if (cardcontent.response[0].user_input === 'Sending message to space') {
+      fetchCardContent();
     }
   }, []);
+
   const renderContent = () => {
     return (
       <div className='w-full flex-center flex-col 2xl:mt-10 stacked_containers'>
@@ -46,10 +31,10 @@ const reviewPage = () => {
         <div className="container pt-14 mx-auto px-4">
           <div className="grid gap-4 lg:grid-cols-2 text-white">
             <div>
-              <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchData} />
+              <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchCardContent} />
             </div>
             <div>
-              <VotingCard content={cardcontent['response'][1]} other_id={parseInt(cardcontent['response'][0]['response_id'])} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][1]} other_id={parseInt(cardcontent['response'][0]['response_id'])} fetcher = {fetchCardContent} />
             </div>
           </div>
         </div>
