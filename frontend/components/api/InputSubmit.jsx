@@ -25,4 +25,3 @@ export const submitEarthlingsMessage = async (user_input) => {
         return 'Failed to send request to backend';
     }
 };
-//  submitEarthlingsMessage;
