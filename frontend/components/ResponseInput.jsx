@@ -48,7 +48,7 @@ const ResponseInput = ({ handleAIResponse }) => {
         />
         {error && <p className="text-red-500">{error}</p>} {/* Display the error message */}
         <div className='pt-3 mx-3 mb-5 gap-4 flex-end'>
-          <Button bordered color="error" auto
+          <Button bordered color="warning" auto // error
             type='submit'
             disabled={isSubmitting}
             className='w-full md:w-auto text-lg px-8 py-1.5 bg-primary-orange rounded-lg text-white md:text-sm md:px-5'
