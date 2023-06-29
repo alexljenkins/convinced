@@ -7,7 +7,7 @@ export const submitEarthlingsMessage = async (user_input) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'access_token': apiKey,
+                'Authorization': apiKey,
             },
             body: JSON.stringify({ user_input }),
         });

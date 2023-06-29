@@ -11,10 +11,11 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 def ask_character_ai(user_input:str) -> Tuple[str, bool]:
-    user_error_response, passed = check_user_input(user_input)
+    # disabled for now - want this done on the front end by char count
+    # user_error_response, passed = check_user_input(user_input)
 
-    if not passed:
-        return user_error_response, False
+    # if not passed:
+    #     return user_error_response, False
 
     existing_character_response = check_entry_against_db(DATABASE, user_input)
     if isinstance(existing_character_response, str) and existing_character_response:

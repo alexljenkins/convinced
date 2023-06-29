@@ -49,7 +49,7 @@ async def handle_options(request: Request, response: Response):
 async def post_character_response(request: Request, auth: APIKey = Depends(auth.get_api_key)):
     data = await request.json()
     try:
-        answer, success = ask_character_ai(data.get("response"))
+        answer, success = ask_character_ai(str(data.get("user_input")))
         logger.info('Sending response with keys: response, success!')
     except Exception as e:
         logger.error(e)

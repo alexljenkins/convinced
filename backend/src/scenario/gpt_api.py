@@ -11,8 +11,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 class AI:
     def __init__(self, model:str = "gpt-3.5-turbo"):
-
-        
         openai.api_key = self._get_ai_key()
         self.model = model
 
