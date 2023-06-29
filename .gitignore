@@ -1,8 +1,13 @@
-api_key
+# temp files
+**/zz**
 **.db
 **__pycache__**
 **.vscode
 **.venv
+
+# places keys might sit
+**/start.**
+**_key
 
 # dependencies
 **/node_modules
@@ -38,6 +43,3 @@ api_key
 # typescript
 **.tsbuildinfo
 **next-env.d.ts
-
-# temp files
-**/zz**
