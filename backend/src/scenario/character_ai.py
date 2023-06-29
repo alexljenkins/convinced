@@ -1,20 +1,21 @@
 from typing import Tuple
 import logging
 
-from src.scenario.validators import check_user_input
-from src.scenario.messages import MessageLog, preface_character_ai_message, wrap_user_input
-from src.database.database_calls import check_entry_against_db, save_entry
-from src.database.entries import Entry
-from src.globals import DATABASE, CHARACTER_AI
+from scenario.validators import check_user_input
+from scenario.messages import MessageLog, preface_character_ai_message, wrap_user_input
+from database.database_calls import check_entry_against_db, save_entry
+from database.entries import Entry
+from globals import DATABASE, CHARACTER_AI
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 def ask_character_ai(user_input:str) -> Tuple[str, bool]:
-    user_error_response, passed = check_user_input(user_input)
+    # disabled for now - want this done on the front end by char count
+    # user_error_response, passed = check_user_input(user_input)
 
-    if not passed:
-        return user_error_response, False
+    # if not passed:
+    #     return user_error_response, False
 
     existing_character_response = check_entry_against_db(DATABASE, user_input)
     if isinstance(existing_character_response, str) and existing_character_response:

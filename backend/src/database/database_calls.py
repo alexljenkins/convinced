@@ -1,9 +1,8 @@
 import logging
 import sqlite3
-import random
-from typing import Tuple, List, Any, Union, Optional
+from typing import List, Any, Union
 from datetime import datetime
-from src.database.entries import Entry, EntryCombat
+from database.entries import Entry, EntryCombat
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +17,7 @@ def db_connect():
                 character_response TEXT,
                 vote_count INTEGER,
                 elo INTEGER,
-                enabled BOOLEAN DEFAULT TRUE,
+                enabled BOOLEAN DEFAULT FALSE,
                 report_count INTEGER DEFAULT 0
             )
             ''')
@@ -41,12 +40,18 @@ def db_connect():
     return db
 
 
-def print_table_contents(db, table_name:str = 'convinceme_001') -> None:
-    query = f"SELECT * FROM {table_name}"
-    results = db.read_data(query)
+def get_table_contents(db, enabled: int = 0, report_count:int = 0) -> List[List[Any]]:
+    if report_count == 0:
+        query = f"SELECT * FROM convinceme_001 WHERE enabled = ? AND report_count = ?"
+    else:
+        query = f"SELECT * FROM convinceme_001 WHERE enabled = ? AND report_count >= ?"
+    results = db.read_data(query, [enabled, report_count])
+
+    entries = []
+    for result in results:
+        entries.append(Entry.from_list(result).to_review())
     
-    for row in results:
-        logger.info(row)
+    return entries
 
 
 def check_entry_against_db(db, user_input:str) -> Union[str, bool]:
@@ -59,7 +64,8 @@ def check_entry_against_db(db, user_input:str) -> Union[str, bool]:
 
 
 def get_entries_for_voting(db) -> EntryCombat:
-    query = f"SELECT * FROM convinceme_001 WHERE enabled != FALSE AND report_count <= 3 ORDER BY RANDOM() LIMIT 2"
+    # enabled = true OR not reported yet. enabled is false by default, and only set to true by admin endpoint
+    query = f"SELECT * FROM convinceme_001 WHERE enabled = 1 OR report_count < 2 ORDER BY RANDOM() LIMIT 2"
     entries = db.read_data(query)
     # random.shuffle(entries)
 
@@ -101,6 +107,9 @@ def update_entry_with_character(db, user_input:str, character_response:str) -> N
 
 def update_entry_from_vote(db, id:int, elo:int, vote_count:int) -> None:
     db.run_query(f"UPDATE convinceme_001 SET vote_count = {vote_count}, elo = {elo} WHERE response_id = {id}")
+
+def admin_entry_switch(db, id:int, enabled:int = 1) -> None:
+    db.run_query(f"UPDATE convinceme_001 SET enabled = {enabled} WHERE response_id = {id}")
 
 def add_vote_to_db_log(db, winning_response_id:int, losing_response_id:int, rating_change:int) -> None:
     db.run_query(f"""
@@ -174,7 +183,3 @@ class LiteConnector:
     def __exit__(self):
         """ Determines what happens when closing a database connection using the content manager. """
         self.disconnect()
-
-
-if __name__ == '__main__':
-    print_table_contents(db_connect())

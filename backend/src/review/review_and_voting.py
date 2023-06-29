@@ -1,9 +1,9 @@
 import logging
 from typing import List
 
-from src.globals import DATABASE
-from src.database.database_calls import add_vote_to_db_log, update_entry_from_vote, get_specific_voted_on_entries
-from src.database.entries import Entry, EntryCombat, calculate_rating_change
+from globals import DATABASE
+from database.database_calls import add_vote_to_db_log, update_entry_from_vote, get_specific_voted_on_entries
+from database.entries import Entry, EntryCombat, calculate_rating_change
 
 logger = logging.getLogger(__name__)
 

@@ -9,12 +9,13 @@ class Entry(BaseModel):
     character_response: Optional[str] = ''
     vote_count: int = 0
     elo: int = 1200
-    enabled: bool = True
+    enabled: bool = False
     if_wins:int = 0
+    reports:int = 0
 
     @classmethod
     def from_list(cls, values):
-        return cls(response_id = values[0], user_input = values[1], character_response = values[2], vote_count = values[3], elo = values[4], enabled = values[5])
+        return cls(response_id = values[0], user_input = values[1], character_response = values[2], vote_count = values[3], elo = values[4], enabled = values[5], reports = values[6])
     
     def to_dict(self):
         return {
@@ -23,7 +24,17 @@ class Entry(BaseModel):
             # "character_response": self.character_response,
             "vote_count": self.vote_count,
             "elo": self.elo,
-            # "enabled": self.enabled
+            "enabled": self.enabled,
+            "reports": self.reports
+        }
+
+    def to_review(self):
+        return {
+            "response_id": self.response_id,
+            "user_input": self.user_input,
+            "vote_count": self.vote_count,
+            "enabled": self.enabled,
+            "reports": self.reports
         }
 
     def to_db(self):

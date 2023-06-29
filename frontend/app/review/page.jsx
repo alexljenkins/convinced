@@ -1,26 +1,22 @@
 "use client"
 import VotingCard from "@components/VotingCard";
-
+import { fetchReviewData } from '@components/api/ReviewData';
 import { useState, useEffect } from 'react';
 
-const Example = () => {
-  const [cardcontent, setCardContent] = useState({ 'response': [{ 'user_input': 'Loading Data' },{'user_input': 'Please Wait...'}]});
+const reviewPage = () => {
+  const [cardcontent, setCardContent] = useState({ 'response': [{ 'user_input': 'Sending message to space' }, {'user_input': 'Please Wait...'}]});
   
-  const fetchData = async () => {
-    const apiResponse = await fetch('http://localhost:8000/api/collect_responses', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',},
-      body: JSON.stringify({ "key": "alexisthebestchuckouttherest" }),
-    });
-
-    const data = await apiResponse.json();
+  const fetchCardContent = async () => {
+    const data = await fetchReviewData();
     setCardContent(data);
   };
+
   useEffect(() => {
-    if (cardcontent.response[0].user_input === 'Loading Data') {
-      fetchData();
+    if (cardcontent.response[0].user_input === 'Sending message to space') {
+      fetchCardContent();
     }
   }, []);
+
   const renderContent = () => {
     return (
       <div className='w-full flex-center flex-col 2xl:mt-10 stacked_containers'>
@@ -35,10 +31,10 @@ const Example = () => {
         <div className="container pt-14 mx-auto px-4">
           <div className="grid gap-4 lg:grid-cols-2 text-white">
             <div>
-              <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchData} />
+              <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchCardContent} />
             </div>
             <div>
-              <VotingCard content={cardcontent['response'][1]} other_id={parseInt(cardcontent['response'][0]['response_id'])} fetcher = {fetchData} />
+              <VotingCard content={cardcontent['response'][1]} other_id={parseInt(cardcontent['response'][0]['response_id'])} fetcher = {fetchCardContent} />
             </div>
           </div>
         </div>
@@ -49,4 +45,4 @@ const Example = () => {
   return renderContent();
 };
 
-export default Example;
+export default reviewPage;

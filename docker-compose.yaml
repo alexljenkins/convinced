@@ -3,12 +3,17 @@ services:
   convinced_backend:
     build: ./backend
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
-      - 6891:6891
+      - 8000:8000
+    environment:
+      - API_KEY=${API_KEY}
+      - AI_KEY=${AI_KEY}
   convinced_frontend:
     build: ./frontend
     volumes:
-      - .:/app
+      - ./frontend:/app
     ports:
       - 3002:3002
+    environment:
+      - API_KEY=${API_KEY}

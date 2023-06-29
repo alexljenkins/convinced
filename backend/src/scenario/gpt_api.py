@@ -1,21 +1,29 @@
+import os
 from typing import Tuple
 import logging
 
 import openai
 
-from src.scenario.messages import MessageLog
+from scenario.messages import MessageLog
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-def get_api_key(filepath:str) -> str:
-    with open(filepath, "r") as txt_file:
-        return txt_file.readlines()[0]
-
 class AI:
-    def __init__(self, key:str, model:str = "gpt-3.5-turbo"):
-        openai.api_key = key
+    def __init__(self, model:str = "gpt-3.5-turbo"):
+        openai.api_key = self._get_ai_key()
         self.model = model
+
+    def _get_ai_key(self) -> str:
+        key = os.environ.get("AI_KEY")
+        if not key:
+            try:
+                with open('ai_key', "r") as txt_file:
+                    key = txt_file.readlines()[0]
+            except FileNotFoundError:
+                logger.error("AI_KEY not found")
+                raise Exception("AI_KEY not found")
+        return key
 
     def ask(self, message_log:MessageLog, temperature:float = 0.0) -> Tuple[bool, str]:
         try:
