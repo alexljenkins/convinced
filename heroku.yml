@@ -1,32 +1,15 @@
 build:
   frontend:
-    context: ./frontend
-    dockerfile: Dockerfile
+    docker:
+      dockerfile: frontend/Dockerfile
+
+run:
+  frontend:
+    command: sh -c 'yarn install && yarn build && yarn start'
+    env:
+      - PORT=3000
+
   backend:
-    context: ./backend
-    dockerfile: Dockerfile
-
-environments:
-  - backend/.env
-  - frontend/.env
-
-services:
-  - name: convinced_backend
-    image:
-      build:
-        context: ./backend
-        dockerfile: Dockerfile
-      env:
-        - ENV_FILE=backend/.env
-    ports:
-      - 8000:8000
-
-  - name: convinced_frontend
-    image:
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile
-      env:
-        - ENV_FILE=frontend/.env
-    ports:
-      - 3000:3000
+    command: uvicorn main:app --host 0.0.0.0 --port $PORT
+    env:
+      - PORT=8000
