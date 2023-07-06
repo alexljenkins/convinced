@@ -3,17 +3,21 @@ FROM node:18-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN  npm install --production
 RUN npm install -g next
+RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
+RUN npm install
 
-COPY . /app
+RUN npm list --depth=0
+
+COPY . .
 
 RUN npm run build
 
-EXPOSE 3002
-ENV PORT 3002
+EXPOSE 3000
+ENV PORT 3000
 
 ARG API_KEY
 ENV API_KEY=$API_KEY
 
-CMD next build && npm start
+# CMD next build && npm start
+CMD npm run dev --host 0.0.0.0

@@ -22,6 +22,6 @@ export const submitEarthlingsMessage = async (user_input) => {
         }
     } catch (error) {
         console.error('An error occurred while sending the request to backend:', error);
-        return 'Failed to send request to backend';
+        return 'Failed to send message to space';
     }
 };

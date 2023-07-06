@@ -37,6 +37,7 @@ app.add_middleware(
 @app.options("/api/get_responses")
 @app.options("/api/ask_character_ai")
 async def handle_options(request: Request, response: Response):
+    logger.warning("Handling OPTIONS request")
     response.headers["Allow"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"  # Replace with the origin of your frontend
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"

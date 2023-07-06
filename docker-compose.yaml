@@ -6,14 +6,17 @@ services:
       - ./backend:/app
     ports:
       - 8000:8000
-    environment:
-      - API_KEY=${API_KEY}
-      - AI_KEY=${AI_KEY}
+    env_file: ./backend/.env
+    # environment:
+    #   - API_KEY=${API_KEY}
+    #   - AI_KEY=${AI_KEY}
   convinced_frontend:
     build: ./frontend
     volumes:
       - ./frontend:/app
     ports:
-      - 3002:3002
-    environment:
-      - API_KEY=${API_KEY}
+      - 3000:3000
+    env_file: ./frontend/.env
+    # environment:
+    #   - API_KEY=${API_KEY}
+  # network: # required so they can talk to each other.

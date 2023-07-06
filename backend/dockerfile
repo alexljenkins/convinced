@@ -27,8 +27,8 @@ COPY src /app/src
 RUN poetry config virtualenvs.create false \
     && poetry install --only main --no-interaction --no-ansi
 
-EXPOSE 6891
-ENV PORT 6891
+EXPOSE 8000
+ENV PORT 8000
 
 # ENTRYPOINT ["bash", "-c", "ls -R $PWD"] # confirmed only backend stuff exists here
 # ENTRYPOINT ["uvicorn", "app.src.app:app", "--reload"]
