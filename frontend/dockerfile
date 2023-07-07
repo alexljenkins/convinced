@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm install -g next
-RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
+# RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
 RUN npm install
 
 RUN npm list --depth=0
