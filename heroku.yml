@@ -1,19 +1,8 @@
-version: "3"
-
-services:
-  backend:
-    image: convinced_backend:1.0.0
-      # backend: backend/Dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      API_KEY: ${API_KEY}
-      AI_KEY: ${AI_KEY}
-
-  frontend:
-    image: convinced_frontend:1.0.0
-      # frontend: 
-    ports:
-      - "3000:3000"
-    environment:
-      API_KEY: ${API_KEY}
+setup:
+  config:
+    AI_KEY: ${AI_KEY}
+    API_KEY: ${API_KEY}
+build:
+  docker:
+    web: frontend/Dockerfile
+    worker: backend/Dockerfile
