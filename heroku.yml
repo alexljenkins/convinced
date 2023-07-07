@@ -1,7 +1,19 @@
-build:
-  docker:
-    frontend: frontend/Dockerfile
-    backend: backend/Dockerfile
-env:
-  - API_KEY: ${API_KEY}
-  - AI_KEY: ${AI_KEY}
+version: "3"
+
+services:
+  backend:
+    docker: backend/Dockerfile
+      # backend: 
+    ports:
+      - "8000:8000"
+    environment:
+      API_KEY: ${API_KEY}
+      AI_KEY: ${AI_KEY}
+
+  frontend:
+    docker: frontend/Dockerfile
+      # frontend: 
+    ports:
+      - "3000:3000"
+    environment:
+      API_KEY: ${API_KEY}
