@@ -4,5 +4,5 @@ setup:
     API_KEY: ${API_KEY}
 build:
   docker:
-    web: frontend/Dockerfile
-    worker: backend/Dockerfile
+    web: frontend/dockerfile
+    worker: backend/dockerfile
