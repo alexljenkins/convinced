@@ -1,9 +1,10 @@
 import { fetchApiKey } from '@components/keys';
+import { backend_url } from './backendUrl';
 
 export const fetchReviewData = async () => {
     const apiKey = fetchApiKey();
     try {
-      const apiResponse = await fetch('http://localhost:8000/api/collect_responses', {
+      const apiResponse = await fetch(`${backend_url}/api/collect_responses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

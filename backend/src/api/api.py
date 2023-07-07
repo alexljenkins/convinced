@@ -28,6 +28,7 @@ origins = [
     "http://convinced-7d0bcebf4272.herokuapp.com",
     "https://convinced-7d0bcebf4272.herokuapp.com:3000",
     "http://convinced-7d0bcebf4272.herokuapp.com:3000",
+    "*"
 ]
 app.add_middleware(
     CORSMiddleware,

@@ -1,10 +1,11 @@
 import { fetchApiKey } from '@components/keys';
+import { backend_url } from './backendUrl';
 
 export const handleReportClick = async (report_id) => {
   console.log("Report button clicked");
   const apiKey = fetchApiKey();
   try {
-    const response = await fetch('http://localhost:8000/api/report', {
+    const response = await fetch(`${backend_url}/api/report`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
