@@ -2,7 +2,6 @@ build:
   docker:
     frontend: frontend/Dockerfile
     backend: backend/Dockerfile
-  config:
-  // .env vars
-    - API_KEY=${API_KEY}
-    - AI_KEY=${AI_KEY}
+config:
+  - API_KEY: ${API_KEY}
+  - AI_KEY: ${AI_KEY}
