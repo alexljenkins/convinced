@@ -26,4 +26,4 @@ LABEL org.opencontainers.image.title="convinced_frontend"
 LABEL org.opencontainers.image.version="1.0.0"
 
 # CMD next build && npm start
-CMD npm run dev --host 0.0.0.0
+CMD npm run start
