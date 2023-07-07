@@ -19,5 +19,11 @@ ENV PORT 3000
 ARG API_KEY
 ENV API_KEY=$API_KEY
 
+# Adds the image name and tag
+LABEL maintainer="Alex Jenkins <alexljenkins89@gmail.com>"
+LABEL description="Data Scientist who loves building things."
+LABEL org.opencontainers.image.title="convinced_frontend"
+LABEL org.opencontainers.image.version="1.0.0"
+
 # CMD next build && npm start
 CMD npm run dev --host 0.0.0.0

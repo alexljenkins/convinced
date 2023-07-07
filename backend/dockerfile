@@ -30,6 +30,12 @@ RUN poetry config virtualenvs.create false \
 EXPOSE 8000
 ENV PORT 8000
 
+# Adds the image name and tag
+LABEL maintainer="Alex Jenkins <alexljenkins89@gmail.com>"
+LABEL description="Data Scientist who loves building things."
+LABEL org.opencontainers.image.title="convinced_backend"
+LABEL org.opencontainers.image.version="1.0.0"
+
 # ENTRYPOINT ["bash", "-c", "ls -R $PWD"] # confirmed only backend stuff exists here
 # ENTRYPOINT ["uvicorn", "app.src.app:app", "--reload"]
 ENTRYPOINT ["python", "/app/src/app.py"]

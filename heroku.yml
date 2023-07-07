@@ -2,8 +2,8 @@ version: "3"
 
 services:
   backend:
-    docker: backend/Dockerfile
-      # backend: 
+    image: convinced_backend:1.0.0
+      # backend: backend/Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -11,7 +11,7 @@ services:
       AI_KEY: ${AI_KEY}
 
   frontend:
-    docker: frontend/Dockerfile
+    image: convinced_frontend:1.0.0
       # frontend: 
     ports:
       - "3000:3000"

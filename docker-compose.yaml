@@ -1,7 +1,8 @@
 version: '3'
 services:
-  convinced_backend:
+  backend:
     build: ./backend
+    image: convinced_backend:1.0.0
     volumes:
       - ./backend:/app
     ports:
@@ -10,8 +11,9 @@ services:
     # environment:
     #   - API_KEY=${API_KEY}
     #   - AI_KEY=${AI_KEY}
-  convinced_frontend:
+  frontend:
     build: ./frontend
+    image: convinced_frontend:1.0.0
     volumes:
       - ./frontend:/app
     ports:
