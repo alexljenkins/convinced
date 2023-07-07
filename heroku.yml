@@ -12,8 +12,12 @@ run:
     command: sh -c 'yarn install && yarn build && yarn start'
     env:
       - PORT=3000
+      - API_KEY=${API_KEY}
+
   backend:
     name: convinced_backend
-    command: uvicorn main:app --host 0.0.0.0 --port $PORT
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
     env:
       - PORT=8000
+      - API_KEY=${API_KEY}
+      - AI_KEY=${AI_KEY}
