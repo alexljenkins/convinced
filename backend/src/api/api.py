@@ -24,6 +24,10 @@ logging.basicConfig(level=logging.DEBUG)
 # Configure CORS
 origins = [
     "http://localhost:3000",  # Update with the origin of your frontend
+    "https://convinced-7d0bcebf4272.herokuapp.com",
+    "http://convinced-7d0bcebf4272.herokuapp.com",
+    "https://convinced-7d0bcebf4272.herokuapp.com:3000",
+    "http://convinced-7d0bcebf4272.herokuapp.com:3000",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -39,7 +43,7 @@ app.add_middleware(
 async def handle_options(request: Request, response: Response):
     logger.warning("Handling OPTIONS request")
     response.headers["Allow"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"  # Replace with the origin of your frontend
+    response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
