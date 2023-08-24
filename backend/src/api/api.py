@@ -24,10 +24,9 @@ logging.basicConfig(level=logging.DEBUG)
 # Configure CORS
 origins = [
     "http://localhost:3000",  # Update with the origin of your frontend
-    "https://convinced-7d0bcebf4272.herokuapp.com",
-    "http://convinced-7d0bcebf4272.herokuapp.com",
-    "https://convinced-7d0bcebf4272.herokuapp.com:3000",
-    "http://convinced-7d0bcebf4272.herokuapp.com:3000",
+    "http://0.0.0.0:3000",
+    "https://0.0.0.0:3000",
+    "https://3.25.105.171:3000",
     "*"
 ]
 app.add_middleware(
