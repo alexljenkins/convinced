@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
 # Update with the origin of your frontend
-origins = ["http://52.65.141.185:3000", "http://54.66.192.194:3000" "http://frontend:3000", "http://convinced-frontend-1:3000", "http://convinced-frontend-1:3000", "http://localhost:3000"]
+origins = ["http://54.66.192.194:3000", "http://54.66.192.194:3000" "http://frontend:3000", "http://convinced-frontend-1:3000", "http://convinced-frontend-1:3000", "http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
