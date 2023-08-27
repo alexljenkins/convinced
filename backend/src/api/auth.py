@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 async def get_api_key(api_key_header: str = Security(api_key_header)):
-    return True
+    return api_key_header
     # if api_key_header == 'alexisthebestchuckouttherest':
     #     return api_key_header
     # if api_key_header == os.getenv('API_KEY'):
