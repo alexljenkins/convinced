@@ -22,21 +22,20 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
+# Update with the origin of your frontend
 origins = [
-    "http://localhost:3000",  # Update with the origin of your frontend
+    "http://localhost:3000",
+    "https://localhost:3000",
     "http://0.0.0.0:3000",
     "https://0.0.0.0:3000",
-    "https://3.25.105.171:3000",
-    "http://3.25.105.171:3000",
-    "*"
 ]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["POST", "GET", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["POST", "GET", "OPTIONS"],
+#     allow_headers=["Content-Type", "Authorization"],
+# )
 
 @app.options("/api/vote")
 @app.options("/api/get_responses")
@@ -44,7 +43,7 @@ app.add_middleware(
 async def handle_options(request: Request, response: Response):
     logger.warning("Handling OPTIONS request")
     response.headers["Allow"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
+    # response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
