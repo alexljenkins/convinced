@@ -33,17 +33,17 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 
-@app.options("/api/vote")
-@app.options("/api/get_responses")
-@app.options("/api/ask_character_ai")
-async def handle_options(request: Request, response: Response):
-    logger.warning("Handling OPTIONS request")
-    response.headers["Allow"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Origin"] = "*" #", ".join(origins)
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+# @app.options("/api/vote")
+# @app.options("/api/get_responses")
+# @app.options("/api/ask_character_ai")
+# async def handle_options(request: Request, response: Response):
+#     logger.warning("Handling OPTIONS request")
+#     response.headers["Allow"] = "GET, POST, OPTIONS"
+#     response.headers["Access-Control-Allow-Origin"] = "*" #", ".join(origins)
+#     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
-    return response
+#     return response
 
 
 @app.post("/api/ask_character_ai", tags=["Production Method"])
