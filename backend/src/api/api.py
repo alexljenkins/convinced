@@ -23,19 +23,15 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
 # Update with the origin of your frontend
-origins = [
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://0.0.0.0:3000",
-    "https://0.0.0.0:3000",
-]
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["POST", "GET", "OPTIONS"],
-#     allow_headers=["Content-Type", "Authorization"],
-# )
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
+)
 
 @app.options("/api/vote")
 @app.options("/api/get_responses")
