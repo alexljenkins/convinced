@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm install -g next
-# RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
+RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
 RUN npm install
 
 RUN npm list --depth=0
@@ -28,4 +28,4 @@ LABEL org.opencontainers.image.title="convinced_frontend"
 LABEL org.opencontainers.image.version="1.0.0"
 
 # CMD next start
-CMD npm run build && sleep 10s && npm run start
+CMD npm install && npm run build && sleep 10s && npm run start
