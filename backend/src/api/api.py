@@ -39,7 +39,7 @@ app.add_middleware(
 async def handle_options(request: Request, response: Response):
     logger.warning("Handling OPTIONS request")
     response.headers["Allow"] = "GET, POST, OPTIONS"
-    # response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
+    response.headers["Access-Control-Allow-Origin"] = "*" #", ".join(origins)
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
