@@ -155,4 +155,4 @@ async def whitelist_blacklist_response(id: int, enable: int, auth: APIKey = Depe
 if __name__ == "__main__":
     # print_table_contents(DATABASE)
     import uvicorn
-    uvicorn.run("api:app", port=8000, reload=True, access_log=False)
+    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True, access_log=False)
