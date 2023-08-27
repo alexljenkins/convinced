@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
 # Update with the origin of your frontend
-origins = ["*"]
+origins = ["http://52.65.141.185:3000", "http://frontend:3000", "http://convinced-frontend-1:3000", "http://convinced-frontend-1:3000", "http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,17 +33,17 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 
-# @app.options("/api/vote")
-# @app.options("/api/get_responses")
-# @app.options("/api/ask_character_ai")
-# async def handle_options(request: Request, response: Response):
-#     logger.warning("Handling OPTIONS request")
-#     response.headers["Allow"] = "GET, POST, OPTIONS"
-#     response.headers["Access-Control-Allow-Origin"] = "*" #", ".join(origins)
-#     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-#     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+@app.options("/api/vote")
+@app.options("/api/get_responses")
+@app.options("/api/ask_character_ai")
+async def handle_options(request: Request, response: Response):
+    logger.warning("Handling OPTIONS request")
+    response.headers["Allow"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
-#     return response
+    return response
 
 
 @app.post("/api/ask_character_ai", tags=["Production Method"])
