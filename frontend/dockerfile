@@ -11,7 +11,9 @@ RUN npm list --depth=0
 
 COPY . .
 
-RUN npm run build
+RUN npm audit fix --force
+# RUN npm run build
+# RUN next build
 
 EXPOSE 3000
 ENV PORT 3000
@@ -25,5 +27,5 @@ LABEL description="Data Scientist who loves building things."
 LABEL org.opencontainers.image.title="convinced_frontend"
 LABEL org.opencontainers.image.version="1.0.0"
 
-# CMD next build && npm start
-CMD npm run start
+# CMD next start
+CMD npm run build && sleep 10s && npm run start
