@@ -1,9 +1,10 @@
 import { fetchApiKey } from '@components/keys';
+import { backend_url } from './backendUrl';
 
 export const submitEarthlingsMessage = async (user_input) => {
     const apiKey = fetchApiKey();
     try {
-        const apiResponse = await fetch('http://localhost:8000/api/ask_character_ai', {
+        const apiResponse = await fetch(`${backend_url}/api/ask_character_ai`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,6 +23,6 @@ export const submitEarthlingsMessage = async (user_input) => {
         }
     } catch (error) {
         console.error('An error occurred while sending the request to backend:', error);
-        return 'Failed to send request to backend';
+        return 'Failed to send message to space';
     }
 };

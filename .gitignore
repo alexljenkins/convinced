@@ -4,6 +4,7 @@
 **__pycache__**
 **.vscode
 **.venv
+**.env**
 
 # places keys might sit
 **/start.**

@@ -1,0 +1,8 @@
+setup:
+  config:
+    AI_KEY: ${AI_KEY}
+    API_KEY: ${API_KEY}
+build:
+  docker:
+    web: frontend/dockerfile
+    worker: backend/dockerfile

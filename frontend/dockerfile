@@ -3,17 +3,29 @@ FROM node:18-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN  npm install --production
 RUN npm install -g next
+RUN npm i @next/swc-linux-arm64-gnu && npm i @next/swc-linux-arm64-musl
+RUN npm install
 
-COPY . /app
+RUN npm list --depth=0
 
-RUN npm run build
+COPY . .
 
-EXPOSE 3002
-ENV PORT 3002
+RUN npm audit fix --force
+# RUN npm run build
+# RUN next build
+
+EXPOSE 3000
+ENV PORT 3000
 
 ARG API_KEY
 ENV API_KEY=$API_KEY
 
-CMD next build && npm start
+# Adds the image name and tag
+LABEL maintainer="Alex Jenkins <alexljenkins89@gmail.com>"
+LABEL description="Data Scientist who loves building things."
+LABEL org.opencontainers.image.title="convinced_frontend"
+LABEL org.opencontainers.image.version="1.0.0"
+
+# CMD next start
+CMD npm install && npm run build && sleep 10s && npm run start

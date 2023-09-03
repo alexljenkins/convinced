@@ -36,13 +36,13 @@ const ResponseInput = ({ handleAIResponse }) => {
       return;
     }
 
-    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve('Timeout occurred'), 10000));
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve('Timeout occurred'), 100000));
     const backendPromise = submitEarthlingsMessage(response);
     try {
       const result = await Promise.race([timeoutPromise, backendPromise]);
       // Handle the result from the backend or the timeout
       if (result === 'Timeout occurred') {
-        setError("Message took to long to get to the aliens. Please try again later.")
+        setError("Message took too long to get to the aliens. Please try again later.")
         setBusy(false);
       } else {
         // Handle successful backend response

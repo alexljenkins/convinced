@@ -22,9 +22,20 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
-origins = [
-    "http://localhost:3000",  # Update with the origin of your frontend
-]
+# Update with the origin of your frontend
+origins = ["http://54.66.192.194:3000",
+           "https://54.66.192.194:3000",
+           "http://frontend:3000",
+           "http://convinced-frontend-1:3000",
+           "http://localhost:3000",
+           "http://54.66.192.194",
+           "https://54.66.192.194",
+           "http://frontend",
+           "http://convinced-frontend-1",
+           "http://localhost",
+           "http://convinced.me",
+           "http://www.convinced.me"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -37,8 +48,9 @@ app.add_middleware(
 @app.options("/api/get_responses")
 @app.options("/api/ask_character_ai")
 async def handle_options(request: Request, response: Response):
+    logger.warning("Handling OPTIONS request")
     response.headers["Allow"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"  # Replace with the origin of your frontend
+    response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
@@ -150,4 +162,4 @@ async def whitelist_blacklist_response(id: int, enable: int, auth: APIKey = Depe
 if __name__ == "__main__":
     # print_table_contents(DATABASE)
     import uvicorn
-    uvicorn.run("api:app", port=8000, reload=True, access_log=False)
+    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True, access_log=False)
