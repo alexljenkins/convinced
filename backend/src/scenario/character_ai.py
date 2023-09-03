@@ -29,7 +29,7 @@ def ask_character_ai(user_input:str) -> Tuple[str, bool]:
     
     logger.info(f"Monster Log:\n{character_log.messages}")
     
-    success, response = CHARACTER_AI.ask(character_log, temperature = 0.3)
+    success, response = CHARACTER_AI.ask(character_log, temperature = 0.01)
     
     if isinstance(response, str) and response and success:
         new_entry = Entry(user_input = user_input, character_response = response)
