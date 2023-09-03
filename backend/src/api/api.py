@@ -143,9 +143,9 @@ async def get_report(response_id: int, auth: APIKey = Depends(auth.get_api_key))
 
 
 @app.get("/admin/list_responses", tags=["Admin Method"])
-async def list_responses(enabled: int = 0, report:int = 0, auth: APIKey = Depends(auth.get_api_key)):
+async def list_responses(auth: APIKey = Depends(auth.get_api_key)):
     logger.info(f'Getting records from db.')
-    return get_table_contents(DATABASE, enabled, report)
+    return get_table_contents(DATABASE)
 
 @app.get("/admin/whitelist_response", tags=["Admin Method"])
 async def whitelist_blacklist_response(id: int, enable: int, auth: APIKey = Depends(auth.get_api_key)):
