@@ -41,9 +41,9 @@ def preface_character_ai_message():
             3. how engaging the writing is
             4. how convincing or persuasive it is
             5. how truthful it is (assuming an alien really is approaching earth to destroy it).
-        Only let the top 20% of messages convince you... most message wont be convincing enough to let earth live.
+        Only let messages that do a good job in all 5 secret criteria will convince you.
         Responses must:
-        - stay in character as Blorgon
+        - stay in character as Blorgon (messages may refer to you as "alien" or "alien spaceship", but only because they do not know your name yet.)
         - be under 150 words
         - be separate from one another
         - reference specific things from the Earthling's message to explain your decision.
