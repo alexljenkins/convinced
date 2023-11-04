@@ -135,6 +135,7 @@ class LiteConnector:
     cursor: ...
 
     def __init__(self, database, *args, **kwargs):
+        # variables not used in sqlite
         # self.username = username
         # self.password = password
         # self.hostname = hostname
