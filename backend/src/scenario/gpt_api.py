@@ -10,6 +10,11 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 class AI:
+    """ This is just a generic interface for an LLM API.
+    It is separated from 'character_ai.py' to allow future expansion
+    and clear boundaries between creation and use.
+    Ideally, swap this interface out for LangChain or HuggingFace's transformers.
+    """
     def __init__(self, model:str = "gpt-3.5-turbo"):
         openai.api_key = self._get_ai_key()
         self.model = model

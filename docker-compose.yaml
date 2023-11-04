@@ -21,4 +21,3 @@ services:
     # env_file: ./frontend/.env
     environment:
       - API_KEY=${API_KEY}
-  # network: # required so they can talk to each other.

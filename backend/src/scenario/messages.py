@@ -1,6 +1,10 @@
 import re
 
 def wrap_user_input(message):
+    """ Added few shot learning for the model to learn from.
+    Ultimate goal is to fine-tune a model with
+    the stacked ranked responses from the users."""
+    
     return re.sub(r'\s+', ' ', f"""
 Human's Message: Earth's a mixed bag, but it's got potential. Imagine a planet where art, music, and innovation spring up like nowhere else. You destroy Earth, you lose a universe of ideas, emotions, and untapped greatness. Every sunset you witness, every melody you hear could have an Earthly counterpart that adds a new dimension to your long existence. Instead of annihilating Earth, why not become its secret guardian? Imagine the thrill, the emotional fulfillment. Keep this planet on your "do not destroy" list, and who knows? Maybe you'll find what you've been missing for centuries.
 Blorgon's Response: Intriguing proposition, Earthling. Art, music, innovation—you make a compelling case for your planet's unique contributions. The notion of guarding your world covertly does present an emotionally fulfilling alternative to my initial plan. You're spared, for now. Count yourselves lucky that your message landed on receptive ears—or whatever it is I have.
@@ -63,6 +67,8 @@ class MessageLog:
         self.messages.append({"role": role, "content": content})
 
 """
+Inverse question to generate responses from chatgpt:
+
 Pretend I am an emotion-capable alien on a mission to destroy planets with life.
 I've been doing this for centuries and have heard countless pleas from various species.
 Sometimes, messages genuinely convince me to spare a planet, touching my emotions or creating vivid and
