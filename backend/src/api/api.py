@@ -23,18 +23,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Configure CORS
 # Update with the origin of your frontend
-origins = ["http://54.66.192.194:3000",
-           "https://54.66.192.194:3000",
-           "http://frontend:3000",
-           "http://convinced-frontend-1:3000",
-           "http://localhost:3000",
-           "http://54.66.192.194",
-           "https://54.66.192.194",
-           "http://frontend",
-           "http://convinced-frontend-1",
-           "http://localhost",
-           "http://convinced.me",
-           "http://www.convinced.me"]
+origins = ["https://54.66.238.245:3000",
+           "http://54.66.238.245:3000",
+           "https://54.66.238.245",
+           "http://54.66.238.245",
+           "http://convinced.app",
+           "http://www.convinced.app"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -149,9 +143,9 @@ async def get_report(response_id: int, auth: APIKey = Depends(auth.get_api_key))
 
 
 @app.get("/admin/list_responses", tags=["Admin Method"])
-async def list_responses(enabled: int = 0, report:int = 0, auth: APIKey = Depends(auth.get_api_key)):
+async def list_responses(auth: APIKey = Depends(auth.get_api_key)):
     logger.info(f'Getting records from db.')
-    return get_table_contents(DATABASE, enabled, report)
+    return get_table_contents(DATABASE)
 
 @app.get("/admin/whitelist_response", tags=["Admin Method"])
 async def whitelist_blacklist_response(id: int, enable: int, auth: APIKey = Depends(auth.get_api_key)):

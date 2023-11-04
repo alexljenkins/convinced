@@ -28,8 +28,8 @@ const reviewPage = () => {
           If you were an alien, which of these messages<br />
           is more likely to convince you to let Earth live?
         </p>
-        <div className="container pt-14 mx-auto px-4">
-          <div className="grid gap-4 lg:grid-cols-2 text-white">
+        <div className="container pt-14 px-2 lg:px-4 lg:mx-auto">
+          <div className="grid gap-4 lg:grid-cols-2 grid-cols-1 text-white">
             <div>
               <VotingCard content={cardcontent['response'][0]} other_id={parseInt(cardcontent['response'][1]['response_id'])} fetcher={fetchCardContent} />
             </div>

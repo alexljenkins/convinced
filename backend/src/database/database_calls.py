@@ -40,12 +40,9 @@ def db_connect():
     return db
 
 
-def get_table_contents(db, enabled: int = 0, report_count:int = 0) -> List[List[Any]]:
-    if report_count == 0:
-        query = f"SELECT * FROM convinceme_001 WHERE enabled = ? AND report_count = ?"
-    else:
-        query = f"SELECT * FROM convinceme_001 WHERE enabled = ? AND report_count >= ?"
-    results = db.read_data(query, [enabled, report_count])
+def get_table_contents(db) -> List[List[Any]]:
+    query = f"SELECT * FROM convinceme_001"
+    results = db.read_data(query)
 
     entries = []
     for result in results:
