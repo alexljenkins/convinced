@@ -27,5 +27,5 @@ LABEL description="Data Scientist who loves building things."
 LABEL org.opencontainers.image.title="convinced_frontend"
 LABEL org.opencontainers.image.version="1.0.0"
 
-# CMD next start
+# unfortunately, needed this hacky solution to get the production mode to run - not a npm wizard
 CMD npm install && npm run build && sleep 10s && npm run start
