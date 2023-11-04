@@ -11,8 +11,9 @@ The goal is to challenge users to write using different creative writing techniq
 The initial scene is an alien (named Blorgon) approaching earth in order to destroy it. Blorgon has been destroying worlds with life for many years – at the request of his superiors. You are able to send a single message to Blorgon as he approaches Earth, which must convince him to spare us (at the risk of being punished by his bosses or our species threatening his in the future).
 
 **Hints:**
+
 - *Use empathy to think about Blorgon’s situation – because he is unlikely to care what we’re doing here on Earth.*
--  *Focus on the future, explaining what life would be like for him if he destroys Earth and if he doesn’t.*
+- *Focus on the future, explaining what life would be like for him if he destroys Earth and if he doesn’t.*
 - *Edit your work! Make it engaging and exciting to read (as it will be public for others to see).*
 
 ## Feedback Loop
@@ -36,10 +37,11 @@ Currently, there is no plan to continue building features for this project. It w
 ### Core Expansion Feature
 
 Transform the single scenario into a 5-level path. Something like:
+
 1. Convince Blorgon not to destroy earth (current)
 2. Befriend Blorgon through a back-and-forth chat
 3. Get Blorgon to divulge a secret piece of tech
-4. A scenario dependant on if the secret was tricked out of Blorgon or given willingly. 
+4. A scenario dependant on if the secret was tricked out of Blorgon or given willingly.
 5. Blorgon’s home world has discovered his defiance… They have allowed you to speak in his defence. Speak (using a mic) to the 12 judges on his home world, presenting a consise argument as to why the policy to seek out and destroy all planets with life is wrong – and how Blorgon’s defiance specifically can positively benefit their world.
 
 **Additional feature ideas as part of core expansion feature:**
@@ -52,6 +54,7 @@ Transform the single scenario into a 5-level path. Something like:
 ### Further Feature Set Ideas
 
 By focusing on different dimensions of communication, we are able to build endless scenarios focused on different skills, ability and people. Explore dimensions of:
+
 - **Age:** *kids in school, kids at uni, adults in the workforce, retired people etc.*
 - **Situation:** *real life, fictional (by us), within another’s fictional world.*
 - **Audience:** *a single person, a room full of people, a governing body, a group of friends.*
