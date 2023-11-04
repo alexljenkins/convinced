@@ -1,5 +1,21 @@
 # Attribution-NonCommercial 4.0 International
 
+## In Simple Terms
+
+__You are free to:__
+
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
+
+__So long as:__
+
+- You mention me - You must give appropriate credit (to Alex Jenkins), provide a link to this license and repo, and indicate if changes were made. You may do so in any reasonable manner, but not that suggests endorsement.
+- You do not profit - You may not use the material for commercial or business purposes.
+- You do not change these restrictions - You may not apply legal terms or technological measures that legally restrict others from doing anything this license permits.
+
+I cannot revoke these freedoms as long as you follow the license terms.
+Explanation adapted from [creativecommons.org](https://creativecommons.org/licenses/by-nc/4.0/deed.en)
+
 ## Creative Commons Attribution-NonCommercial 4.0 International Public License
 
 By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
